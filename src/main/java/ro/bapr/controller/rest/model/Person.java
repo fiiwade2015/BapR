@@ -1,12 +1,23 @@
 package ro.bapr.controller.rest.model;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.io.Serializable;
 
 /**
  * @author Spac Valentin - Marian
  * @version 1.0 31.10.2015.
  */
-public class Person implements Serializable{
+@Entity
+@Table(name = "shops")
+public class Person implements Serializable {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
     private String name;
     private int age;
 
@@ -33,6 +44,15 @@ public class Person implements Serializable{
 
     public Person setAge(int age) {
         this.age = age;
+        return this;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public Person setId(int id) {
+        this.id = id;
         return this;
     }
 }

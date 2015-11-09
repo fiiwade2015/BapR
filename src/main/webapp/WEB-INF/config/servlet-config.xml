@@ -18,22 +18,6 @@
     <mvc:default-servlet-handler/>
     <mvc:resources mapping="/resources/**" location="/resources/" />
     <context:component-scan base-package="ro.bapr.controller"/>
-<!--
-    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-        <property name="prefix" value="/WEB-INF/view/"/>
-        <property name="suffix" value=".html"/>
-    </bean>-->
-    <!--    &lt;!&ndash; Configure to plugin JSON as request and response in method handler &ndash;&gt;
-        <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
-            <property name="messageConverters">
-                <list>
-                    <ref bean="jsonMessageConverter"/>
-                </list>
-            </property>
-        </bean>
 
-        &lt;!&ndash; Configure bean to convert JSON to POJO and vice versa &ndash;&gt;
-        <bean id="jsonMessageConverter" class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
-            <property name="prettyPrint" value="true"/>
-        </bean>-->
+    <import resource="datasource-config.xml"/>
 </beans>
