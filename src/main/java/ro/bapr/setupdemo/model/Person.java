@@ -1,4 +1,4 @@
-package ro.bapr.controller.rest.model;
+package ro.bapr.setupdemo.model;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -12,7 +12,7 @@ import java.io.Serializable;
  * @version 1.0 31.10.2015.
  */
 @Entity
-@Table(name = "shops")
+@Table(name = "person")
 public class Person implements Serializable {
 
     @Id

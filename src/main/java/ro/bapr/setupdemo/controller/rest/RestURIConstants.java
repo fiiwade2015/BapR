@@ -1,4 +1,4 @@
-package ro.bapr.controller.rest;
+package ro.bapr.setupdemo.controller.rest;
 
 /**
  * @author Spac Valentin - Marian

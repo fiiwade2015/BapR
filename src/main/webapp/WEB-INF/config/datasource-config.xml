@@ -18,11 +18,14 @@
         <constructor-arg ref="dataSource"/>
     </bean>-->
 
+    <bean id="hibernatePersistance" class="org.hibernate.ejb.HibernatePersistence"/>
+    <bean id="jpaDialect" class="org.springframework.orm.jpa.vendor.HibernateJpaDialect"/>
+
     <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
-        <property name="persistenceProvider" ref="org.hibernate.ejb.HibernatePersistence"/>
+        <property name="packagesToScan" value="ro.bapr.setupdemo.model"/>
+        <property name="persistenceProvider" ref="hibernatePersistance"/>
         <property name="dataSource" ref="dataSource"/>
-        <property name="jpaDialect" value="org.hibernate.dialect.MySQL5Dialect"/>
-        <property name="packagesToScan" value="ro.bapr.controller.rest.model"/>
+        <property name="jpaDialect" ref="jpaDialect"/>
         <property name="jpaProperties" ref="hibernateProperties"/>
     </bean>
 
@@ -35,11 +38,12 @@
         <property name="properties">
             <props>
                 <prop key="hibernate.show_sql">true</prop>
+                <prop key="hibernate.hbm2ddl.auto">create</prop>
             </props>
         </property>
     </bean>
 
-    <jpa:repositories base-package="org.springframework.data.jpa.repository"
+    <jpa:repositories base-package="ro.bapr.setupdemo.repos"
                       entity-manager-factory-ref="entityManagerFactory"
                       transaction-manager-ref="transactionManager">
 <!--        <repository type="assignable" expression="org.springframework.data.jpa.repository.sample.AuditableUserRepository" />-->

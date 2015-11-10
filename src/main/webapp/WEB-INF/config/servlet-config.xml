@@ -17,7 +17,7 @@
     </mvc:annotation-driven>
     <mvc:default-servlet-handler/>
     <mvc:resources mapping="/resources/**" location="/resources/" />
-    <context:component-scan base-package="ro.bapr.controller"/>
+    <context:component-scan base-package="ro.bapr.setupdemo"/>
 
     <import resource="datasource-config.xml"/>
 </beans>
