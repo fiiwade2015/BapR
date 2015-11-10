@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RestController;
 import ro.bapr.setupdemo.model.Person;
 import ro.bapr.setupdemo.model.graph.PersonGraph;
 import ro.bapr.setupdemo.service.PersonService;
-import ro.bapr.setupdemo.service.PersonServiceImpl;
 import ro.bapr.setupdemo.service.graph.PersonServiceGraph;
 
 /**
@@ -25,6 +24,7 @@ public class PersonRestController {
 
     @Autowired
     private PersonService s;
+
     @Autowired
     private PersonServiceGraph g;
 

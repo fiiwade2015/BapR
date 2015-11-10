@@ -8,14 +8,6 @@
     <name>BapR - Backpacker Recommender</name>
     <url>http://maven.apache.org</url>
 
-    <repositories>
-        <repository>
-            <id>neo4j-public-repository</id>
-            <url>http://m2.neo4j.org/releases</url>
-            <name>Publicly available Maven 2 repository for Neo4j</name>
-        </repository>
-    </repositories>
-
     <dependencies>
         <dependency>
             <groupId>junit</groupId>
@@ -39,7 +31,19 @@
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-entitymanager</artifactId>
             <version>4.2.1.Final</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.javassist</groupId>
+                    <artifactId>javassist</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
+        <dependency>
+            <groupId>org.javassist</groupId>
+            <artifactId>javassist</artifactId>
+            <version>3.20.0-GA</version>
+        </dependency>
+
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
