@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:neo4j="http://www.springframework.org/schema/data/neo4j"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <neo4j:repositories base-package="ro.bapr.setupdemo.repos.graph"/>
+<!--    <tx:annotation-driven mode="aspectj"/>-->
+
+    <neo4j:config graphDatabaseService="graphDatabaseService" base-package="ro.bapr.setupdemo.model.graph"/>
+
+    <bean id="graphDatabaseService"
+          class="org.springframework.data.neo4j.rest.SpringCypherRestGraphDatabase">
+        <constructor-arg index="0" value="neo-luella-kuhn-lightgreen-563e3984bbce3.do-stories.graphstory.com:7473" />
+        <constructor-arg index="1" value="563e39e171ddc" />
+        <constructor-arg index="2" value="hYZRAnnaIuvqAUi1JpceJh1yGrRiZQXyl9sAAIsZ" />
+    </bean>
+</beans>

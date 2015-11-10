@@ -6,4 +6,5 @@ package ro.bapr.setupdemo.controller.rest;
  */
 class RestURIConstants {
     public static final String TEST_URI = "/person";
+    public static final String GRAPH_TEST_URI = "/person/graph";
 }

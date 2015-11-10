@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:jpa="http://www.springframework.org/schema/data/jpa"
+       xmlns:neo4j="http://www.springframework.org/schema/data/neo4j"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa.xsd">
+
+    <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="driverClassName" value="com.mysql.jdbc.Driver" />
+        <property name="url" value="jdbc:mysql://fenrir.info.uaic.ro:3306/testmf" />
+        <property name="username" value="testmf" />
+        <property name="password" value="i8xSZOoxMT" />
+    </bean>
+
+  <!--  <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+
+    <bean id="namedJdbcTemplate" class=" org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate">
+        <constructor-arg ref="dataSource"/>
+    </bean>-->
+
+    <bean id="hibernatePersistance" class="org.hibernate.ejb.HibernatePersistence"/>
+    <bean id="jpaDialect" class="org.springframework.orm.jpa.vendor.HibernateJpaDialect"/>
+
+    <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+        <property name="packagesToScan" value="ro.bapr.setupdemo.model"/>
+        <property name="persistenceProvider" ref="hibernatePersistance"/>
+        <property name="dataSource" ref="dataSource"/>
+        <property name="jpaDialect" ref="jpaDialect"/>
+        <property name="jpaProperties" ref="hibernateProperties"/>
+    </bean>
+
+    <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+        <property name="entityManagerFactory" ref="entityManagerFactory"/>
+    </bean>
+
+    <bean id="hibernateProperties"
+          class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+        <property name="properties">
+            <props>
+                <prop key="hibernate.show_sql">true</prop>
+                <prop key="hibernate.hbm2ddl.auto">create</prop>
+            </props>
+        </property>
+    </bean>
+
+    <jpa:repositories base-package="ro.bapr.setupdemo.repos"
+                      entity-manager-factory-ref="entityManagerFactory"
+                      transaction-manager-ref="transactionManager">
+<!--        <repository type="assignable" expression="org.springframework.data.jpa.repository.sample.AuditableUserRepository" />-->
+    </jpa:repositories>
+
+
+</beans>
