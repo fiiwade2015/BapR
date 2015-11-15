@@ -1,4 +1,4 @@
-package ro.bapr.setupdemo.controller.rest;
+package ro.bapr.controller;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -9,10 +9,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-import ro.bapr.setupdemo.model.Person;
-import ro.bapr.setupdemo.model.graph.PersonGraph;
-import ro.bapr.setupdemo.service.PersonService;
-import ro.bapr.setupdemo.service.graph.PersonServiceGraph;
+import ro.bapr.model.Person;
+import ro.bapr.service.api.PersonService;
 
 /**
  * @author Spac Valentin - Marian
@@ -25,30 +23,24 @@ public class PersonRestController {
     @Autowired
     private PersonService s;
 
-    @Autowired
-    private PersonServiceGraph g;
 
-
-    @RequestMapping(value = RestURIConstants.TEST_URI, method = RequestMethod.GET)
+    @RequestMapping(value = Endpoint.TEST_URI, method = RequestMethod.GET)
     public ResponseEntity<Person> getPerson() {
         Person test = new Person("gigel", 21);
-
+        s.add();
         test = s.create(test);
         return new ResponseEntity<>(test, HttpStatus.OK);
     }
 
-    @RequestMapping(value = RestURIConstants.TEST_URI, method = RequestMethod.POST)
+    @RequestMapping(value = Endpoint.TEST_URI, method = RequestMethod.POST)
     public ResponseEntity<Person> setPerson(@RequestBody Person p) {
         log.info(p.getName());
         return new ResponseEntity<Person>(p, HttpStatus.OK);
     }
 
-    @RequestMapping(value = RestURIConstants.GRAPH_TEST_URI, method = RequestMethod.GET)
-    public ResponseEntity<PersonGraph> getGraphPerson() {
-        PersonGraph test = new PersonGraph("gigel", 21);
-        test = g.create(test);
-
-        return new ResponseEntity<>(test, HttpStatus.OK);
+    @RequestMapping(value = Endpoint.GRAPH_TEST_URI, method = RequestMethod.GET)
+    public ResponseEntity<String> getGraphPerson() {
+        return new ResponseEntity<>(s.testThisShit(), HttpStatus.OK);
     }
 
 }

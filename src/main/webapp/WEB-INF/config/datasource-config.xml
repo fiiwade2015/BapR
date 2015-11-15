@@ -4,6 +4,7 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
     <import resource="sql-datasource-config.xml"/>
-    <import resource="graph-datasource-config.xml"/>
+
+    <!--<bean name="sesameRepoManager"-->
 
 </beans>

@@ -1,4 +1,4 @@
-package ro.bapr.setupdemo.model;
+package ro.bapr.model;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -54,5 +54,13 @@ public class Person implements Serializable {
     public Person setId(int id) {
         this.id = id;
         return this;
+    }
+
+    @Override
+    public String toString() {
+        return "Person{" +
+                "name='" + name + '\'' +
+                ", age=" + age +
+                '}';
     }
 }

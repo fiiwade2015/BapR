@@ -6,15 +6,27 @@
     <packaging>war</packaging>
     <version>1.0-SNAPSHOT</version>
     <name>BapR - Backpacker Recommender</name>
-    <url>http://maven.apache.org</url>
+    <url>http://www.bapr.com</url>
+
+    <properties>
+        <!-- Generic properties -->
+        <java.version>1.8</java.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <resource.directory>src/main/resources</resource.directory>
+
+        <!-- Test -->
+        <junit.version>4.12</junit.version>
+
+    </properties>
 
     <dependencies>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>3.8.1</version>
-            <scope>test</scope>
+            <version>4.12</version>
         </dependency>
+
 
         <!--Hibernate-->
         <dependency>
@@ -61,27 +73,19 @@
             <artifactId>spring-data-jpa</artifactId>
             <version>1.9.0.RELEASE</version>
         </dependency>
+
+        <!--Sesame RDF-->
         <dependency>
-            <groupId>org.springframework.data</groupId>
-            <artifactId>spring-data-neo4j-rest</artifactId>
-            <version>3.4.0.RELEASE</version>
+            <groupId>org.openrdf.sesame</groupId>
+            <artifactId>sesame-runtime</artifactId>
+            <version>4.0.0</version>
         </dependency>
         <dependency>
-            <groupId>javax.validation</groupId>
-            <artifactId>validation-api</artifactId>
-            <version>1.0.0.GA</version>
+            <groupId>org.openrdf.sesame</groupId>
+            <artifactId>sesame-sail-nativerdf</artifactId>
+            <version>4.0.0</version>
         </dependency>
-        <dependency>
-            <groupId>org.neo4j</groupId>
-            <artifactId>neo4j</artifactId>
-            <version>2.3.0</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.neo4j</groupId>
-                    <artifactId>neo4j-udc</artifactId> <!--statistics about server deployment-->
-                </exclusion>
-            </exclusions>
-        </dependency>
+
 
         <!-- Jackson -->
         <dependency>
@@ -103,6 +107,7 @@
             <version>2.4</version>
         </dependency>
     </dependencies>
+
     <build>
         <finalName>BapR - Backpacker Recommender</finalName>
         <plugins>

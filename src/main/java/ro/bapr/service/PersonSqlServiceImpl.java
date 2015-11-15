@@ -1,9 +1,12 @@
-package ro.bapr.setupdemo.service;
+package ro.bapr.service;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import ro.bapr.setupdemo.model.Person;
-import ro.bapr.setupdemo.repos.PersonRepo;
+import ro.bapr.model.Person;
+import ro.bapr.repository.api.PersonRepository;
+import ro.bapr.service.api.PersonNotFound;
+import ro.bapr.service.api.PersonSqlService;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -12,20 +15,21 @@ import java.util.List;
  * Created by valentin.spac on 11/10/2015.
  */
 @Service
-public class PersonServiceImpl implements PersonService {
+public class PersonSqlServiceImpl implements PersonSqlService {
+    private final Logger log = LogManager.getLogger(PersonServiceImpl.class);
 
     @Resource
-    private PersonRepo personRepository;
+    private PersonRepository personRepository;
 
     @Override
-    @Transactional
     public Person create(Person person) {
+        log.debug("Method call with params {}", person);
         return personRepository.save(person);
     }
 
     @Override
-    @Transactional(rollbackFor=PersonNotFound.class)
     public Person delete(int id) throws PersonNotFound {
+        log.debug("Method call with params: {}", id);
         Person deletedPerson = personRepository.findOne(id);
 
         if (deletedPerson == null)
@@ -36,14 +40,14 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
-    @Transactional
     public List<Person> findAll() {
+        log.debug("Method call");
         return personRepository.findAll();
     }
 
     @Override
-    @Transactional(rollbackFor=PersonNotFound.class)
     public Person update(Person person) throws PersonNotFound {
+        log.debug("Method call with params {}", person);
         Person updatedPerson = personRepository.findOne(person.getId());
 
         if (updatedPerson == null)
@@ -56,9 +60,8 @@ public class PersonServiceImpl implements PersonService {
 
     @Override
     public Person findById(int id) {
+        log.debug("Method call with params: {}", id);
         return personRepository.findOne(id);
     }
 
-    public class PersonNotFound extends Throwable {
-    }
 }
