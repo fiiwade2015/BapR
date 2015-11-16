@@ -71,4 +71,9 @@ public class PersonServiceImpl implements PersonService {
         return sqlService.findById(id);
     }
 
+    @Override
+    public Person findByName(String name) {
+        log.debug("Method call with param {}", name);
+        return sqlService.findByName(name);
+    }
 }

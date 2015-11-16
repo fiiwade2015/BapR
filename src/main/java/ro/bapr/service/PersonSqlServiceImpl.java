@@ -64,4 +64,9 @@ public class PersonSqlServiceImpl implements PersonSqlService {
         return personRepository.findOne(id);
     }
 
+    @Override
+    public Person findByName(String name) {
+        log.debug("Method call with params: {}", name);
+        return personRepository.findByName(name);
+    }
 }

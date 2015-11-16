@@ -14,4 +14,5 @@ public interface PersonSqlService {
     public List<Person> findAll();
     public Person update(Person shop) throws PersonNotFound;
     public Person findById(int id);
+    public Person findByName(String name);
 }

@@ -15,18 +15,12 @@ import org.openrdf.model.vocabulary.XMLSchema;
 import org.openrdf.repository.Repository;
 import org.openrdf.repository.RepositoryConnection;
 import org.openrdf.repository.RepositoryResult;
-import org.openrdf.repository.config.RepositoryConfig;
-import org.openrdf.repository.config.RepositoryImplConfig;
 import org.openrdf.repository.manager.LocalRepositoryManager;
-import org.openrdf.repository.sail.config.SailRepositoryConfig;
 import org.openrdf.rio.RDFFormat;
 import org.openrdf.rio.Rio;
-import org.openrdf.sail.config.SailImplConfig;
-import org.openrdf.sail.nativerdf.config.NativeStoreConfig;
 import org.springframework.beans.factory.annotation.Value;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 
 /**
  * @author Spac Valentin - Marian
@@ -44,7 +38,7 @@ public class PersonGraphRepositoryImpl {
     @Value("${sesame.config.storage.indexes}")
     private String indexes;
 
-    private static LocalRepositoryManager manager;
+    private LocalRepositoryManager manager;
 
     public void test() {
         log.debug("Test method called");
@@ -82,16 +76,7 @@ public class PersonGraphRepositoryImpl {
 
     private LocalRepositoryManager getManager() {
         if(manager == null) {
-            manager = new LocalRepositoryManager(new File(baseDir));
-            // create a configuration for the SAIL stack
-            SailImplConfig backendConfig = new NativeStoreConfig(indexes);
-            // create a configuration for the repository implementation
-            RepositoryImplConfig repositoryTypeSpec = new SailRepositoryConfig(backendConfig);
-
-
-            RepositoryConfig repConfig = new RepositoryConfig(repositoryId, repositoryTypeSpec);
-            manager.initialize();
-            manager.addRepositoryConfig(repConfig);
+            manager = GraphRepositoryManager.getInstance(repositoryId, baseDir, indexes).getSesameManager();
         }
 
         return manager;
