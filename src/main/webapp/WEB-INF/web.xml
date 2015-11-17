@@ -9,7 +9,7 @@
         <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
         <init-param>
             <param-name>contextConfigLocation</param-name>
-            <param-value>WEB-INF/config/servlet-config.xml</param-value>
+            <param-value>classpath*:/config/servlet-config.xml, classpath*:/config/context-config.xml</param-value>
         </init-param>
     </servlet>
 
@@ -17,4 +17,14 @@
         <servlet-name>baprServlet</servlet-name>
         <url-pattern>/*</url-pattern>
     </servlet-mapping>
+<!--
+    <error-page>
+        <exception-type>java.lang.Exception</exception-type>
+        <location>/uncaughtException</location>
+    </error-page>
+
+    <error-page>
+        <error-code>404</error-code>
+        <location>/resourceNotFound</location>
+    </error-page>-->
 </web-app>
