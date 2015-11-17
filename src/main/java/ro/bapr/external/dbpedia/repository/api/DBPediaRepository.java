@@ -1,4 +1,4 @@
-package ro.bapr.external.dbpedia.service.api;
+package ro.bapr.external.dbpedia.repository.api;
 
 import org.openrdf.query.TupleQueryResult;
 
@@ -6,7 +6,7 @@ import org.openrdf.query.TupleQueryResult;
  * @author Spac Valentin - Marian
  * @version 1.0 17.11.2015.
  */
-public interface DBPediaService {
+public interface DBPediaRepository {
 
     TupleQueryResult query(String queryString);
 }

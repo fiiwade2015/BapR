@@ -90,6 +90,12 @@
             <artifactId>sesame-sail-nativerdf</artifactId>
             <version>4.0.0</version>
         </dependency>
+        <dependency>
+            <groupId>org.openrdf.sesame</groupId>
+            <artifactId>sesame-repository-sparql</artifactId>
+            <version>4.0.0</version>
+        </dependency>
+
 
 
         <!-- Jackson -->

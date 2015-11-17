@@ -1,7 +1,9 @@
 package ro.bapr.external.dbpedia.service;
 
-import org.openrdf.model.Model;
+import org.openrdf.query.TupleQueryResult;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import ro.bapr.external.dbpedia.repository.api.DBPediaRepository;
 import ro.bapr.external.dbpedia.service.api.DBPediaService;
 
 /**
@@ -11,8 +13,11 @@ import ro.bapr.external.dbpedia.service.api.DBPediaService;
 @Service
 public class DBPediaServiceImpl implements DBPediaService {
 
+    @Autowired
+    private DBPediaRepository repo;
+
     @Override
-    public Model query(String queryString) {
-        return null;
+    public TupleQueryResult query(String queryString) {
+        return repo.query(queryString);
     }
 }
