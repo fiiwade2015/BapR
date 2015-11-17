@@ -22,7 +22,7 @@
     <bean id="jpaDialect" class="org.springframework.orm.jpa.vendor.HibernateJpaDialect"/>
 
     <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
-        <property name="packagesToScan" value="ro.bapr.model"/>
+        <property name="packagesToScan" value="ro.bapr.internal.model"/>
         <property name="persistenceProvider" ref="hibernatePersistence"/>
         <property name="dataSource" ref="dataSource"/>
         <property name="jpaDialect" ref="jpaDialect"/>
@@ -43,7 +43,7 @@
         </property>
     </bean>
 
-    <jpa:repositories base-package="ro.bapr.repository"
+    <jpa:repositories base-package="ro.bapr.internal.repository"
                       entity-manager-factory-ref="entityManagerFactory"
                       transaction-manager-ref="transactionManager">
     </jpa:repositories>

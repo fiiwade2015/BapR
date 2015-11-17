@@ -1,12 +1,12 @@
-package ro.bapr.service;
+package ro.bapr.internal.service;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
-import ro.bapr.model.Person;
-import ro.bapr.repository.api.PersonRepository;
-import ro.bapr.service.api.PersonNotFound;
-import ro.bapr.service.api.PersonSqlService;
+import ro.bapr.internal.model.Person;
+import ro.bapr.internal.repository.api.PersonRepository;
+import ro.bapr.internal.service.api.PersonNotFound;
+import ro.bapr.internal.service.api.PersonSqlService;
 
 import javax.annotation.Resource;
 import java.util.List;

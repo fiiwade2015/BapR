@@ -1,4 +1,4 @@
-package ro.bapr.repository.api;
+package ro.bapr.internal.repository.api;
 
 /**
  * @author Spac Valentin - Marian

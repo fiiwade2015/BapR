@@ -1,4 +1,4 @@
-package ro.bapr.repository;
+package ro.bapr.internal.repository;
 
 import org.openrdf.repository.config.RepositoryConfig;
 import org.openrdf.repository.config.RepositoryImplConfig;

@@ -1,11 +1,11 @@
-package ro.bapr.service;
+package ro.bapr.internal.service;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ro.bapr.repository.PersonGraphRepositoryImpl;
-import ro.bapr.service.api.PersonGraphService;
+import ro.bapr.internal.repository.PersonGraphRepositoryImpl;
+import ro.bapr.internal.service.api.PersonGraphService;
 
 /**
  * @author Spac Valentin - Marian
