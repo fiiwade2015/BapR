@@ -1,4 +1,4 @@
-package ro.bapr.model;
+package ro.bapr.internal.model;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

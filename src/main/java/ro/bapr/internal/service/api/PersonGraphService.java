@@ -1,4 +1,4 @@
-package ro.bapr.service.api;
+package ro.bapr.internal.service.api;
 
 /**
  * Created by valentin.spac on 11/10/2015.

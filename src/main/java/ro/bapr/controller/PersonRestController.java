@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-import ro.bapr.model.Person;
-import ro.bapr.service.api.PersonService;
+import ro.bapr.internal.model.Person;
+import ro.bapr.internal.service.api.PersonService;
 
 /**
  * @author Spac Valentin - Marian

@@ -1,6 +1,6 @@
-package ro.bapr.service.api;
+package ro.bapr.internal.service.api;
 
-import ro.bapr.model.Person;
+import ro.bapr.internal.model.Person;
 
 import java.util.List;
 

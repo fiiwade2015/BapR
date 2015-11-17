@@ -1,7 +1,7 @@
-package ro.bapr.repository.api;
+package ro.bapr.internal.repository.api;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import ro.bapr.model.Person;
+import ro.bapr.internal.model.Person;
 
 /**
  * @author Spac Valentin - Marian

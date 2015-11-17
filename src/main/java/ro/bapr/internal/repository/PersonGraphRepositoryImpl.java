@@ -1,4 +1,4 @@
-package ro.bapr.repository;
+package ro.bapr.internal.repository;
 
 import info.aduna.iteration.Iterations;
 import org.apache.logging.log4j.LogManager;

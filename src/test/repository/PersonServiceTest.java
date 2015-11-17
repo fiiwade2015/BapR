@@ -9,9 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import ro.bapr.model.Person;
-import ro.bapr.service.api.PersonNotFound;
-import ro.bapr.service.api.PersonSqlService;
+import ro.bapr.internal.model.Person;
+import ro.bapr.internal.service.api.PersonNotFound;
+import ro.bapr.internal.service.api.PersonSqlService;
 
 import static org.hamcrest.core.IsInstanceOf.instanceOf;
 
