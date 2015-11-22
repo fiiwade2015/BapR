@@ -40,6 +40,7 @@ public class PersonRestController {
 
     @RequestMapping(value = Endpoint.GRAPH_TEST_URI, method = RequestMethod.GET)
     public ResponseEntity<String> getGraphPerson() {
+
         return new ResponseEntity<>(s.testThisShit(), HttpStatus.OK);
     }
 
