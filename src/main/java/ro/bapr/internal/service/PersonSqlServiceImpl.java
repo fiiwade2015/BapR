@@ -1,7 +1,5 @@
 package ro.bapr.internal.service;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
 import ro.bapr.internal.model.Person;
 import ro.bapr.internal.repository.api.PersonRepository;
@@ -16,20 +14,17 @@ import java.util.List;
  */
 @Service
 public class PersonSqlServiceImpl implements PersonSqlService {
-    private final Logger log = LogManager.getLogger(PersonServiceImpl.class);
 
     @Resource
     private PersonRepository personRepository;
 
     @Override
     public Person create(Person person) {
-        log.debug("Method call with params {}", person);
         return personRepository.save(person);
     }
 
     @Override
     public Person delete(int id) throws PersonNotFound {
-        log.debug("Method call with params: {}", id);
         Person deletedPerson = personRepository.findOne(id);
 
         if (deletedPerson == null)
@@ -41,13 +36,11 @@ public class PersonSqlServiceImpl implements PersonSqlService {
 
     @Override
     public List<Person> findAll() {
-        log.debug("Method call");
         return personRepository.findAll();
     }
 
     @Override
     public Person update(Person person) throws PersonNotFound {
-        log.debug("Method call with params {}", person);
         Person updatedPerson = personRepository.findOne(person.getId());
 
         if (updatedPerson == null)
@@ -60,13 +53,11 @@ public class PersonSqlServiceImpl implements PersonSqlService {
 
     @Override
     public Person findById(int id) {
-        log.debug("Method call with params: {}", id);
         return personRepository.findOne(id);
     }
 
     @Override
     public Person findByName(String name) {
-        log.debug("Method call with params: {}", name);
         return personRepository.findByName(name);
     }
 }

@@ -19,13 +19,11 @@ public class PersonGraphServiceImpl implements PersonGraphService {
 
     @Override
     public String testThisShit() {
-        log.debug("Test this shit called");
         return repo.get();
     }
 
     @Override
     public void add() {
-        log.debug("Add method called");
         repo.test();
     }
 }
