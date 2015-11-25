@@ -65,4 +65,14 @@ public class PersonServiceImpl implements PersonService {
     public Person findByName(String name) {
         return sqlService.findByName(name);
     }
+    
+    @Override
+    public Person findByEmail(String email){
+    	return sqlService.findByEmail(email);
+    }
+
+	@Override
+	public Person findByEmailAndPassword(String email, String password) {
+		return sqlService.findByEmailAndPassword(email, password);
+	}
 }

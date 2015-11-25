@@ -1,11 +1,17 @@
 package ro.bapr.internal.model;
 
+import java.io.Serializable;
+
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
-import java.io.Serializable;
+import javax.validation.constraints.NotNull;
+
+import org.hibernate.validator.constraints.Email;
 
 /**
  * @author Spac Valentin - Marian
@@ -15,52 +21,74 @@ import java.io.Serializable;
 @Table(name = "person")
 public class Person implements Serializable {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+	private static final long serialVersionUID = -6825661847491980785L;
+	
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@SequenceGenerator(name = "users_id_seq", sequenceName = "users_id_seq", allocationSize = 1)
+	private Long id;
+	
+	@Email
+	@NotNull
+	@Column(name = "email")
+	private String email;
+	
+	@NotNull
+	@Column(name = "name")
     private String name;
-    private int age;
-
-    public Person(String name, int age) {
-        this.name = name;
-        this.age = age;
-    }
-
+    
+    @NotNull
+	@Column(name = "password")
+	private String password;
+    
     public Person() {
     }
 
-    public String getName() {
-        return name;
+    public Person(String email, String name, String password) {
+    	this.email = email;
+		this.name = name;
+		this.password = password;
     }
 
-    public Person setName(String name) {
-        this.name = name;
-        return this;
-    }
+    
+    public Long getId() {
+		return id;
+	}
 
-    public int getAge() {
-        return age;
-    }
+	public void setId(Long id) {
+		this.id = id;
+	}
 
-    public Person setAge(int age) {
-        this.age = age;
-        return this;
-    }
+	public String getEmail() {
+		return email;
+	}
 
-    public int getId() {
-        return id;
-    }
+	public void setEmail(String email) {
+		this.email = email;
+	}
 
-    public Person setId(int id) {
-        this.id = id;
-        return this;
-    }
+	public String getName() {
+		return name;
+	}
 
-    @Override
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	@Override
     public String toString() {
         return "Person{" +
                 "name='" + name + '\'' +
-                ", age=" + age +
+                ", email=" + email +
                 '}';
     }
+    
 }

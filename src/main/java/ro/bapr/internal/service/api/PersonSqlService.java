@@ -15,4 +15,6 @@ public interface PersonSqlService {
     public Person update(Person shop) throws PersonNotFound;
     public Person findById(int id);
     public Person findByName(String name);
+    public Person findByEmail(String email); 
+    public Person findByEmailAndPassword(String email, String password);
 }

@@ -41,13 +41,13 @@ public class PersonSqlServiceImpl implements PersonSqlService {
 
     @Override
     public Person update(Person person) throws PersonNotFound {
-        Person updatedPerson = personRepository.findOne(person.getId());
+        Person updatedPerson =  personRepository.findOne(person.getId().intValue());
 
         if (updatedPerson == null)
             throw new PersonNotFound();
 
         updatedPerson.setName(person.getName());
-        updatedPerson.setAge(person.getAge());
+        updatedPerson.setEmail(person.getEmail());
         return updatedPerson;
     }
 
@@ -60,4 +60,14 @@ public class PersonSqlServiceImpl implements PersonSqlService {
     public Person findByName(String name) {
         return personRepository.findByName(name);
     }
+
+	@Override
+	public Person findByEmail(String email) {
+		return personRepository.findByEmail(email);
+	}
+
+	@Override
+	public Person findByEmailAndPassword(String email, String password) {
+		return personRepository.findByEmailAndPassword(email, password);
+	}
 }
