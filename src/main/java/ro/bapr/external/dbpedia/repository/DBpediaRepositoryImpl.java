@@ -5,7 +5,7 @@ import org.openrdf.query.TupleQueryResult;
 import org.openrdf.repository.RepositoryConnection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import ro.bapr.external.dbpedia.manager.api.DbpediaManager;
+import ro.bapr.external.api.factory.ConnectionFactory;
 import ro.bapr.external.dbpedia.repository.api.DBPediaRepository;
 
 /**
@@ -16,11 +16,11 @@ import ro.bapr.external.dbpedia.repository.api.DBPediaRepository;
 public class DBpediaRepositoryImpl implements DBPediaRepository {
 
     @Autowired
-    private DbpediaManager manager;
+    private ConnectionFactory connectionFactory;
 
     @Override
     public TupleQueryResult query(String queryString) {
-        RepositoryConnection conn = manager.getConnection();
+        RepositoryConnection conn = connectionFactory.getConnectionFor("dbpedia");
         TupleQueryResult result = conn.prepareTupleQuery(QueryLanguage.SPARQL, queryString).evaluate();
 /*
 

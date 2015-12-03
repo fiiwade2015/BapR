@@ -9,4 +9,6 @@ import ro.bapr.internal.model.Person;
  */
 public interface PersonSqlRepository extends JpaRepository<Person, Integer> {
     Person findByName(String name);
+    Person findByEmail(String email);
+    Person findByEmailAndPassword(String email, String password);
 }

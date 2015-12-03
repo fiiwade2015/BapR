@@ -1,5 +1,8 @@
 package ro.bapr.controller;
 
+import java.io.UnsupportedEncodingException;
+import java.security.NoSuchAlgorithmException;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,8 +12,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+
 import ro.bapr.internal.model.Person;
 import ro.bapr.internal.service.api.PersonService;
+import ro.bapr.internal.utils.security.EncryptionUtil;
 
 /**
  * @author Spac Valentin - Marian
@@ -23,10 +28,9 @@ public class PersonRestController {
     @Autowired
     private PersonService s;
 
-
     @RequestMapping(value = Endpoint.TEST_URI, method = RequestMethod.GET)
-    public ResponseEntity<Person> getPerson() {
-        Person test = new Person("gigel", 21);
+    public ResponseEntity<Person> getPerson() throws NoSuchAlgorithmException, UnsupportedEncodingException {
+        Person test = new Person("gigel1@yahoo.com", "gigel" ,EncryptionUtil.getSHA256Hash("123"));
         s.add();
         test = s.create(test);
         return new ResponseEntity<>(test, HttpStatus.OK);
@@ -40,6 +44,7 @@ public class PersonRestController {
 
     @RequestMapping(value = Endpoint.GRAPH_TEST_URI, method = RequestMethod.GET)
     public ResponseEntity<String> getGraphPerson() {
+
         return new ResponseEntity<>(s.testThisShit(), HttpStatus.OK);
     }
 
