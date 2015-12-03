@@ -1,0 +1,33 @@
+{
+  "id" : 1,
+  "routeId" : 1,
+  "size" : 2,
+  "status" : "in progress",
+  "items" :  
+    [
+      {
+        "status" : "visited",
+        "entity" : {
+          "id" : 1,
+          "name" : "Palace of Culture"
+          "type" : ["Tourist point", "Landmark"]
+          "geolocation" : {
+            "lat" : 47.15739,
+            "long" : 27.58695
+          }
+        }
+      },
+      {
+        "status" : "open",
+        "entity" : {
+          "id" : 2,
+          "name" : "Church of the Three Hierarchs"
+          "type" : ["Landmark", "Church"]
+          "geolocation" : {
+            "lat" :  47.160015,
+            "long" : 27.589987
+          }
+        }
+      }   
+    ]
+}

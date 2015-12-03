@@ -1,0 +1,69 @@
+#%RAML 0.8 Endpoint
+
+  description: Endpoint which manages the system's users
+  type: { typedItem: { schema: user, respExample: "", reqExample: "" } }
+  is: [ secured ]
+  get:
+      
+  /locations:
+    description: Locations visited by user.
+    type: { typedCollection: { schema: location, collectionSchema: locations, respExample: !include ../examples/location.example, reqExample: !include ../examples/location.example, getRespExample: !include ../examples/locations.example } }
+    is: [ secured ]       
+    get:        
+    post:
+        
+    /{locationId}:
+        description: 
+        type: { typedItem: { schema: location, respExample: !include ../examples/location.example, reqExample: !include ../examples/location.example} }
+        is: [ secured ]            
+        uriParameters:
+          locationId:
+            type: number
+            displayName: locationId
+            description: Id of the location object to be accessed
+        get:
+        put:
+        delete:
+        
+        
+    /current:
+        description: Manages the current location of the user
+        type: { typedItem: { schema: location, respExample: !include ../examples/location.example, reqExample: !include ../examples/location.example, } }
+        is: [ secured ]                   
+        get:
+        put:
+  /login:
+    description: Endpoint used for login into application
+    post:
+      body:
+        application/json:
+          schema: login 
+      responses:
+        200:
+          body:
+            application/json:
+              example: "{authorization : 0da0055c-e606-4e27-b888-bcfefce60d86}"
+        400:
+          description: Invalid credentials
+  
+  /logout:
+    is: [ secured ]  
+    description: Used to logout
+    post:
+      responses:
+        200:
+          description: OK
+    
+  /register:
+    description: Endpoint used for user register
+    post:
+      body:
+        application/json:
+          schema: login 
+      responses:
+        200:
+          body:
+            application/json:
+              example: "{authorization : 0da0055c-e606-4e27-b888-bcfefce60d86}"
+        400:
+          description: Bad request

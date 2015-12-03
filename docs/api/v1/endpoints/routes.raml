@@ -1,0 +1,28 @@
+#%RAML 0.8 Endpoint
+
+  description: Routes user planned to follow
+  type: { typedCollection: { schema: route, collectionSchema: routes, respExample: !include ../examples/route.example, reqExample: !include ../examples/route.example, getRespExample: !include ../examples/routes.example } }
+  is: [ secured ]
+  get:    
+  post: 
+  
+  /{routeId}:
+    description: An user-defined route
+    type: { typedItem: { schema: route, respExample: !include ../examples/route.example, reqExample: !include ../examples/route.example } }
+    is: [ secured ]    
+    uriParameters:
+      routeId:
+        type: number
+        displayName: routeId
+        description: Id of the route to be processed
+    get:
+    put:
+    delete:
+    
+    /details:
+      description: An entity which can be placed on the map
+      type: { typedItem: { schema: routesDetails, respExample: !include ../examples/routeDetails.example, reqExample: !include ../examples/routeDetails.example } }
+      is: [ secured ]       
+      get:        
+      put:
+      delete:

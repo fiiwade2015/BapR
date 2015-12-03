@@ -1,0 +1,28 @@
+{
+  "locations" : [
+    {
+      "timestamp" : "02.12.2015 19:25",
+      "entity" : {
+        "id" : 1, 
+        "name" : "Palace of Culture"
+        "type" : ["Tourist point", "Palace"]
+        "geolocation" : {
+          "lat" : 47.15739,
+          "long" : 27.58695
+        }
+      }
+    },
+    {
+      "timestamp" : "15.12.2015 19:25",
+      "entity" : {        
+        "id" : 2,
+        "name" : "Church of the Three Hierarchs",
+        "type" : ["Landmark", "Church"],
+        "geolocation" : {
+          "lat" :  47.160015,
+          "long" : 27.589987        
+        }
+      }
+    }
+  ]
+}

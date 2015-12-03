@@ -1,0 +1,11 @@
+#%RAML 0.8 Schema
+login: |
+  {
+    "$schema": "http://json-schema.org/draft-03/schema",
+    "type": "object",
+    "description": "Login objectused to log a user into app",
+    "properties": {
+      "email":  { "type": "string", "required": true },     
+      "password": { "type": "string", "required": true }
+    }
+  }

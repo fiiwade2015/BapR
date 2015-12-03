@@ -1,0 +1,9 @@
+{
+  "id" : 2, #the id will be changed by the server accordingly
+  "name" : "Palace of Culture",
+  "type" : ["Tourist point", "Palace"],
+  "geolocation" : {
+    "lat" : 47.15739,
+    "long" : 27.58695
+  }
+}

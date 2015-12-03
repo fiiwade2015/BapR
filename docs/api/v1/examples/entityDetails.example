@@ -1,0 +1,9 @@
+{
+  "id": 1,
+  "entityId" : 1,
+  "info" : [
+    { "type" : "website", "data" : "http://www.palatulculturii.ro/Home.htm"},
+    { "type" : "image", "data" : "http://www.palatulculturii.ro/images/header.jpg"},
+    { "type" : "description", "data" : "The Palace of Culture, acknowledged as effigy of the city of Iasi, was built in the neogothic style and as such was one of the last expressions of Romanticism in the official architecture."},
+  ]
+}

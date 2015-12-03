@@ -1,0 +1,57 @@
+#%RAML 0.8
+title: BapR
+version: 1.0
+baseUri: http://localhost:8080/api
+resourceTypes: 
+  - collection : !include resourceTypes/collection.raml
+  - typedCollection : !include resourceTypes/typedCollection.raml
+  - item : !include resourceTypes/item.raml
+  - typedItem : !include resourceTypes/typedItem.raml
+  - base: !include resourceTypes/base.raml
+      
+schemas:
+  - !include schemas/entitySchema.raml 
+  - !include schemas/entitiesSchema.raml
+  - !include schemas/entityDetailsSchema.raml
+  - !include schemas/healthSchema.raml
+  - !include schemas/routeSchema.raml
+  - !include schemas/routesSchema.raml
+  - !include schemas/feedbackSchema.raml
+  - !include schemas/userSchema.raml
+  - !include schemas/login.raml
+  - healthCollection : |
+      {
+        "$schema": "http://json-schema.org/draft-03/schema",
+        "type": "object",
+        "description": "Health array",
+        "properties": {
+          "health":  {
+            "type": "array",
+            "items": { "$ref": "health" }
+          }      
+        }
+      }
+traits: !include traits/traits.raml
+      
+/entities: !include endpoints/entities.raml
+/routes: !include endpoints/routes.raml
+/feedback: !include endpoints/feedback.raml
+/user: !include endpoints/user.raml  
+/health: !include endpoints/health.raml  
+/sparql : 
+  description: Endpoint which allows querying db using sparql
+  get:
+    description: Endpoint which allows querying db using sparql
+    queryParameters:
+      query:
+        type: string
+        displayName: query
+        description: Query to be executed against Db   
+    
+    responses:
+      200:
+        body:
+          application/rdf+xml:
+      400:
+        description: Malformed request
+      

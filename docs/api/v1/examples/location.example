@@ -1,0 +1,12 @@
+{
+  "timestamp" : "02.12.2015 19:25",
+  "entity" : {
+    "id" : 2, 
+    "name" : "Palace of Culture",
+    "type" : ["Tourist point", "Palace"],
+    "geolocation" : {
+      "lat" : 47.15739,
+      "long" : 27.58695
+    }
+  }
+}

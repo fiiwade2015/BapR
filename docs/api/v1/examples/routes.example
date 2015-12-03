@@ -1,0 +1,12 @@
+[
+  {
+    "id" : 2,
+    "rating" : 2,
+    "comment" : "Chilling route"
+  },
+  {
+    "id" : 3,
+    "rating" : 3,
+    "comment" : "Pretty nice"
+  }
+]

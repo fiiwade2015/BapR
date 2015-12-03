@@ -1,0 +1,11 @@
+#%RAML 0.8 ResourceType
+
+usage: This resourceType should be used for any collection of items
+description: A collection of <<resourcePathName>>
+type: base
+
+get:
+  description: Get all <<resourcePathName>>, optionally filtered
+  is: [ paged ]
+post:
+  description: Create a new <<resourcePathName | !singularize>>

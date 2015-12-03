@@ -1,0 +1,18 @@
+#%RAML 0.8 Endpoint
+
+  description: A collection of health feedback #given by the current user to a location
+  type: { typedCollection: { schema: health, collectionSchema: healthCollection, respExample: !include ../examples/entity.response, reqExample: !include ../examples/health.example, getRespExample: !include ../examples/healthCollection.example } }
+  is: [ secured ]
+  
+  /{healthId}:
+    description: 
+    type: { typedItem: { schema: health, respExample: !include ../examples/health.example, reqExample: !include ../examples/health.example } }
+    is: [ secured ]    
+    uriParameters:
+      healthId:
+        type: number
+        displayName: healthId
+        description: Id of the health object to be accessed
+    get:
+    put:
+    delete:   

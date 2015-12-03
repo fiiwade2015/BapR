@@ -1,0 +1,20 @@
+#%RAML 0.8 Endpoint
+
+  description: Endpoint to manage user feedback regarding different locations
+  type: { typedCollection: { schema: feedback, collectionSchema: feedbacks, respExample: !include ../examples/feedback.example, reqExample: !include ../examples/feedback.example, getRespExample: !include ../examples/feedbacks.example } }
+  is: [ secured ]
+  get:    
+  post: 
+  
+  /{feedbackId}:
+    description: An user-defined route
+    type: { typedItem: { schema: feedback, respExample: !include ../examples/feedback.example, reqExample: !include ../examples/feedback.example } }
+    is: [ secured ]    
+    uriParameters:
+      feedbackId:
+        type: number
+        displayName: feedbackId
+        description: Id of the feedback to be accessed
+    get:
+    put:
+    delete:

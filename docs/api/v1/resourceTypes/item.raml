@@ -1,0 +1,14 @@
+#%RAML 0.8 ResourceType
+
+usage: This resourceType should be used for any item
+description: An <<resourcePathName | !singularize>> item 
+type: base
+
+get:
+  description: Retrieves the <<resourcePathName | !singularize>> object
+post?:
+  description: Create a new <<resourcePathName | !singularize>>
+put?:
+  description: Updates and returns the <<resourcePathName | !singularize>> after processing
+delete?:
+  description: Deletes a <<resourcePathName | !singularize>>

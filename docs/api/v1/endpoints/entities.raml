@@ -1,0 +1,48 @@
+#%RAML 0.8 Endpoint
+
+  description: A collection of entities
+  type: { typedCollection: { schema: entity, collectionSchema: entities, respExample: !include ../examples/entity.response, reqExample: !include ../examples/entity.request, getRespExample: !include ../examples/entities.response } }
+  is: [ secured ]
+  get:
+    queryParameters:
+      lat:
+        type: number
+        displayName: lat
+        description: Latitude
+      long:
+        type: number
+        displayName: long
+        description: Longitude
+      radius:
+        type: number
+        displayName: radius
+        description: An epsilon which specifies the radius to be searched
+  post:
+    
+  
+  /{entityId}:
+    description: An entity which can be placed on the map
+    type: { typedItem: { schema: entity, respExample: !include ../examples/entity.response, reqExample: !include ../examples/entity.request } }
+    is: [ secured ]    
+    uriParameters:
+      entityId:
+        type: number
+        displayName: entityId
+        description: Id of the entity to be accessed
+    get:
+    put:
+    delete:
+    
+    /details:
+      description: Details of an entity
+      type: { typedItem: { schema: entityDetails, respExample: !include ../examples/entityDetails.example, reqExample: !include ../examples/entityDetails.example } }
+      is: [ secured ]       
+      get:
+        queryParameters:
+          type:
+            type: string
+            displayName: type
+            description: Filter by type of information needed
+      put:
+      delete:     
+    

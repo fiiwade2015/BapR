@@ -1,0 +1,14 @@
+#%RAML 0.8 Schema
+ entities: |
+  {
+    "$schema": "http://json-schema.org/draft-03/schema",
+    "type": "object",
+    "description": "A collection of entities",
+    "properties": {
+      "size":  { "type": "integer", "required": true },
+        "entities":  {
+          "type": "array",
+          "items": { "$ref": "entity" }
+        }
+    }
+  }

@@ -1,0 +1,32 @@
+#%RAML 0.8 Schema
+ feedback: |
+  {
+    "$schema": "http://json-schema.org/draft-03/schema",
+    "type": "object",
+    "description": "A collection of feedback objects",
+    "properties": {
+      "id":  { "type": "int", "required": true },
+      "geolocation": {
+        "type": "object",
+        "properties": {
+          "lat" : { "type": "int", "required": true },
+          "long": { "type": "int", "required": true }
+        }              
+      }, 
+      "rating" : { "type": "number", "required": true },
+      "comment" : { "type" : "string", "required" : true}
+    }
+  }
+  
+ feedbacks: |
+  {
+    "$schema": "http://json-schema.org/draft-03/schema",
+    "type": "object",
+    "description": "A collection of feedback objects",
+    "properties": {
+        "feedback":  {
+          "type": "array",
+          "items": { "$ref": "feedback" }
+        }
+    }
+  }

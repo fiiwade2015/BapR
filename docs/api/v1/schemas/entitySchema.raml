@@ -1,0 +1,23 @@
+#%RAML 0.8 Schema
+entity: |
+  {
+    "$schema": "http://json-schema.org/draft-03/schema",
+    "type": "object",
+    "description": "A single entity representation",
+    "properties": {
+      "id":  { "type": "int", "required": true },
+      "name":  { "type": "string", "required": true },
+      "type":  { 
+        "type": "array", 
+        "required": true,
+        "items": { "type": "string" }
+      },
+      "geolocation": {
+        "type": "object",
+        "properties": {
+          "lat" : { "type": "int", "required": true },
+          "long": { "type": "int", "required": true }
+        }              
+      } 
+    }
+  }

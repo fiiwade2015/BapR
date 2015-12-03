@@ -1,0 +1,30 @@
+#%RAML 0.8 Schema
+route: |
+  {
+    "$schema": "http://json-schema.org/draft-03/schema",
+    "type": "object",
+    "description": "A route object with generic data",
+    "properties": {
+      "id":  { "type": "int", "required": true },
+      "rating": { "type": "int", "required": true },
+      "comment": { "type": "string", "required": true }
+    }
+  }
+  
+ 
+routesDetails: |
+  {
+    "$schema": "http://json-schema.org/draft-03/schema",
+    "type": "object",
+    "description": "A collection of route details",
+    "properties": {
+      "id":  { "type": "int", "required": true },
+      "routeId":  { "type": "int", "required": true },
+      "status":  { "type": "string", "required": true },
+      "size":  { "type": "integer", "required": true },
+        "entities":  {
+          "type": "array",
+          "items": { "$ref": "entity", "status" : {"type" : "string", "required" : true} }
+        }
+    }
+  }

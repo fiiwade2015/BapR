@@ -1,0 +1,19 @@
+#%RAML 0.8 Schema
+health: |
+  {
+    "$schema": "http://json-schema.org/draft-03/schema",
+    "type": "object",
+    "description": "Health object represention the health status of an entity",
+    "properties": {
+      "id":  { "type": "int", "required": true },
+      "geolocation": {
+        "type": "object",
+        "properties": {
+          "lat" : { "type": "int", "required": true },
+          "long": { "type": "int", "required": true }
+        }              
+      }, 
+      "rating": { "type": "int", "required": true },
+      "comment": { "type": "string", "required": true }
+    }
+  }

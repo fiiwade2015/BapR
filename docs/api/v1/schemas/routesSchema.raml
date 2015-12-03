@@ -1,0 +1,14 @@
+#%RAML 0.8 Schema
+ routes: |
+  {
+    "$schema": "http://json-schema.org/draft-03/schema",
+    "type": "object",
+    "description": "A collection of routes",
+    "properties": {
+      "size":  { "type": "integer", "required": true },
+        "entities":  {
+          "type": "array",
+          "items": { "$ref": "route" }
+        }
+    }
+  } 

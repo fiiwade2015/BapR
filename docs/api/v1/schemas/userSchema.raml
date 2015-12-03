@@ -1,0 +1,32 @@
+#%RAML 0.8 Schema
+ user: |
+  {
+    "$schema": "http://json-schema.org/draft-03/schema",
+    "type": "object",
+    "properties": {
+      "email" : { "type" : "string", "required" : true},
+      "name" : { "type" : "string", "required" : true}
+    }
+  } 
+  
+ location: |
+  {
+    "$schema": "http://json-schema.org/draft-03/schema",
+    "type": "object",
+    "properties": {
+      "timestamp" : { "type" : "timestamp", "required" : "false"},
+      "entity" : { "$ref": "feedback" }
+    }
+  }
+  
+ locations: |
+  {
+    "$schema": "http://json-schema.org/draft-03/schema",
+    "type": "object",
+    "properties": {
+      "locations":  {
+          "type": "array",
+          "items": { "$ref": "location" }
+        }
+    }
+  }
