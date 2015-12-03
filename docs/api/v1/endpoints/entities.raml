@@ -1,6 +1,6 @@
 #%RAML 0.8 Endpoint
 
-  description: A collection of entities
+  description: A collection of entities (objects with geolocation) describing places, landmarks and points of interest
   type: { typedCollection: { schema: entity, collectionSchema: entities, respExample: !include ../examples/entity.response, reqExample: !include ../examples/entity.request, getRespExample: !include ../examples/entities.response } }
   is: [ secured ]
   get:

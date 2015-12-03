@@ -15,6 +15,9 @@ post:
       example: <<reqExample>>
   responses:
     201:
+      headers:
+          Location: 
+            description: Location of the newly created entity
       body:
         application/json:
           schema: <<schema>>
