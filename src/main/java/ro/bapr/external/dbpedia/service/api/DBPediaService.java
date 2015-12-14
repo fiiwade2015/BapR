@@ -1,6 +1,7 @@
 package ro.bapr.external.dbpedia.service.api;
 
-import org.openrdf.query.TupleQueryResult;
+import java.util.Collection;
+import java.util.Map;
 
 /**
  * @author Spac Valentin - Marian
@@ -8,5 +9,5 @@ import org.openrdf.query.TupleQueryResult;
  */
 public interface DBPediaService {
 
-    TupleQueryResult query(String queryString);
+    Collection<Map<String, Object>> query(String queryString);
 }

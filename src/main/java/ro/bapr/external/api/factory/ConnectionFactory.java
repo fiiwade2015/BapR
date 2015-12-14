@@ -16,9 +16,13 @@ public class ConnectionFactory {
     @Value("${dbpedia.sparql.endpoint}")
     private String dbpediaUrl;
 
+    @Value("${openmobilenetwork.sparql.endpoint}")
+    private String openMobileNetwork;
+
     public RepositoryConnection getConnectionFor(String identifier) {
         switch (identifier) {
             case "dbpedia": return getConnection(dbpediaUrl);
+            case "omn" : return getConnection(openMobileNetwork);
             default: throw new IllegalArgumentException(String.format("Invalid identifier [%s]" , identifier));
         }
     }

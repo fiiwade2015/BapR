@@ -6,7 +6,9 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
 
     <context:component-scan base-package="ro.bapr"/>
-    <context:property-placeholder location="classpath*:/properties/external-resources.properties, classpath*:/properties/app-sesame.properties, classpath*:/properties/app-jdbc.properties"/>
+    <context:property-placeholder location="classpath*:/properties/external-resources.properties,
+    classpath*:/properties/app-sesame.properties, classpath*:/properties/app-jdbc.properties,
+    classpath*:/properties/entity.query.properties"/>
 
     <import resource="datasource-config.xml"/>
     <aop:aspectj-autoproxy/>
