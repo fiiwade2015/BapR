@@ -16,6 +16,7 @@
         <spring.security.version>4.0.0.RELEASE</spring.security.version>
          <apache.tiles.version>3.0.3</apache.tiles.version>
         <jstl.version>1.2</jstl.version>
+        <apache.jena.version>3.0.1</apache.jena.version>
         <resource.directory>src/main/resources</resource.directory>
 
         <!-- Test -->
@@ -31,7 +32,6 @@
         </dependency>
 
 
-        <!--Hibernate-->
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-core</artifactId>
@@ -115,17 +115,17 @@
         <dependency>
             <groupId>org.openrdf.sesame</groupId>
             <artifactId>sesame-runtime</artifactId>
-            <version>4.0.0</version>
+            <version>4.0.1</version>
         </dependency>
         <dependency>
             <groupId>org.openrdf.sesame</groupId>
             <artifactId>sesame-sail-nativerdf</artifactId>
-            <version>4.0.0</version>
+            <version>4.0.1</version>
         </dependency>
         <dependency>
             <groupId>org.openrdf.sesame</groupId>
             <artifactId>sesame-repository-sparql</artifactId>
-            <version>4.0.0</version>
+            <version>4.0.1</version>
         </dependency>
 
 

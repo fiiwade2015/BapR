@@ -1,12 +1,11 @@
 package ro.bapr.external.dbpedia.repository.api;
 
-import org.openrdf.query.TupleQueryResult;
+import org.openrdf.model.Model;
 
 /**
  * @author Spac Valentin - Marian
  * @version 1.0 17.11.2015.
  */
 public interface DBPediaRepository {
-
-    TupleQueryResult query(String queryString);
+    Model query(String queryString);
 }

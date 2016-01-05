@@ -1,13 +1,14 @@
 package ro.bapr.internal.service;
 
+import javax.annotation.Resource;
+import java.util.List;
+
 import org.springframework.stereotype.Service;
+
 import ro.bapr.internal.model.Person;
 import ro.bapr.internal.repository.api.PersonRepository;
 import ro.bapr.internal.service.api.PersonNotFound;
 import ro.bapr.internal.service.api.PersonSqlService;
-
-import javax.annotation.Resource;
-import java.util.List;
 
 /**
  * Created by valentin.spac on 11/10/2015.

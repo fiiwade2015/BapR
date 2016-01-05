@@ -6,6 +6,8 @@ package ro.bapr.controller;
  */
 class Endpoint {
     public static final String TEST_URI = "/person";
+    public static final String ENTITIES = "/entities";
+    public static final String WIFI = "/wifi";
     public static final String GRAPH_TEST_URI = "/person/graph";
     public static final String DBPEDIA_TEST_URI = "/dbpedia";
     public static final String LOGIN_PAGE = "/login";
