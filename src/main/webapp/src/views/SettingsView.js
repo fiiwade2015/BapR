@@ -2,16 +2,9 @@ import React                  from 'react';
 import { bindActionCreators } from 'redux';
 import { connect }            from 'react-redux';
 import counterActions         from 'actions/counter';
-import userAuthAction         from 'actions/user';
+import userAction             from 'actions/user';
 import { Link }               from 'react-router';
-import Menu                   from './MenuView'
 var UserApi = require( '../api/userApi');
-
-// We define mapStateToProps where we'd normally use
-// the @connect decorator so the data requirements are clear upfront, but then
-// export the decorated component after the main class definition so
-// the component can be tested w/ and w/o being connected.
-// See: http://rackt.github.io/redux/docs/recipes/WritingTests.html
 const mapStateToProps = (state) => ({
   user : state.user,
   counter : state.counter
@@ -19,11 +12,11 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => {
   return bindActionCreators(
-    Object.assign({}, counterActions, userAuthAction),
+    Object.assign({}, counterActions),
     dispatch);
 }
 
-export class HomeView extends React.Component {
+export class SettingsView extends React.Component {
   static propTypes = {
     increment  : React.PropTypes.func,
     userAuth : React.PropTypes.func,
@@ -33,17 +26,17 @@ export class HomeView extends React.Component {
 
   render () {
     return (
-      <div className="wrapper">
-        <Menu  {...this.props} />
+      <div className="displayItem text-center">
+        <h1>This is the SettingsView</h1>
+        <br/><hr/>
       </div>
     );
   }
 
   constructor (props, context) {
     super(props, context);
+    console.log(this);
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(HomeView);
-
-// to be used maybe :) <Link to='/about'>Go To About View!!</Link>
+export default connect(mapStateToProps, mapDispatchToProps)(SettingsView);
