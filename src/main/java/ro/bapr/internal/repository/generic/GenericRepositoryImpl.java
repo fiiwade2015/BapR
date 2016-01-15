@@ -1,34 +1,26 @@
 package ro.bapr.internal.repository.generic;
 
-import java.util.HashMap;
+import java.util.Collection;
+import java.util.List;
 import java.util.Map;
-
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
+import java.util.stream.Collectors;
 
 import org.openrdf.model.IRI;
-import org.openrdf.model.Model;
-import org.openrdf.model.Statement;
 import org.openrdf.model.ValueFactory;
-import org.openrdf.model.impl.LinkedHashModel;
-import org.openrdf.model.vocabulary.FOAF;
 import org.openrdf.model.vocabulary.RDF;
 import org.openrdf.model.vocabulary.RDFS;
 import org.openrdf.model.vocabulary.XMLSchema;
 import org.openrdf.query.BindingSet;
 import org.openrdf.query.QueryLanguage;
+import org.openrdf.query.QueryResults;
 import org.openrdf.query.TupleQueryResult;
-import org.openrdf.query.dawg.DAWGTestResultSetUtil;
 import org.openrdf.repository.Repository;
 import org.openrdf.repository.RepositoryConnection;
-import org.openrdf.repository.RepositoryResult;
 import org.openrdf.repository.manager.LocalRepositoryManager;
-import org.openrdf.rio.RDFFormat;
-import org.openrdf.rio.Rio;
+import org.springframework.stereotype.Service;
 
-import info.aduna.iteration.Iterations;
 import ro.bapr.internal.repository.GraphRepositoryManager;
-import ro.bapr.response.Result;
+import ro.bapr.service.response.Result;
 
 /**
  * @author Spac Valentin - Marian
@@ -38,13 +30,13 @@ import ro.bapr.response.Result;
 public class GenericRepositoryImpl implements GenericRepository {
 
     //TODO extract this in an abstract class
-    @Value("${sesame.config.repository.id}")
+    @org.springframework.beans.factory.annotation.Value("${sesame.config.repository.id}")
     private String repositoryId;
-    @Value("${sesame.config.base.dir}")
+    @org.springframework.beans.factory.annotation.Value("${sesame.config.base.dir}")
     private String baseDir;
-    @Value("${sesame.config.storage.indexes}")
+    @org.springframework.beans.factory.annotation.Value("${sesame.config.storage.indexes}")
     private String indexes;
-    @Value("${sesame.app.namespace}")
+    @org.springframework.beans.factory.annotation.Value("${sesame.app.namespace}")
     private String appNamespace;
 
     private LocalRepositoryManager manager;
@@ -53,57 +45,30 @@ public class GenericRepositoryImpl implements GenericRepository {
     public void save(Result result) {
         RepositoryConnection conn = null;
         try {
-
-            Repository repo = getManager().getRepository(repositoryId);
-            ValueFactory valueFactory = repo.getValueFactory();
-
-            IRI john = valueFactory.createIRI(appNamespace, "john");
-
-            conn = repo.getConnection();
-            IRI name = valueFactory.createIRI("http://www.openmobilenetwork" +
-                    ".org/ontology/hasSSID"); //context
-
-            conn.add(john, name, valueFactory.createLiteral("linksys", XMLSchema.STRING));
-
-            conn.add(john, RDF.TYPE, FOAF.PERSON);
-            conn.add(john, RDFS.LABEL, valueFactory.createLiteral("John", XMLSchema.STRING));
-
-            RepositoryResult<Statement> stmts = conn.getStatements(null, null, null, true);
-            Model model = Iterations.addAll(stmts, new LinkedHashModel());
-
-            model.setNamespace("rdf", RDF.NAMESPACE);
-            model.setNamespace("rdfs", RDFS.NAMESPACE);
-            model.setNamespace("foaf", FOAF.NAMESPACE);
-            model.setNamespace("ex", appNamespace);
-            Rio.write(model, System.out, RDFFormat.JSONLD);
-        } finally {
-            if(conn != null) {
-                conn.commit();
-                conn.close();
-            }
-        }
-
-    }
-
-    @Override
-    public void save(TupleQueryResult result) {
-        RepositoryConnection conn = null;
-        try {
-
             Repository repo = getManager().getRepository(repositoryId);
             ValueFactory valueFactory = repo.getValueFactory();
             conn = repo.getConnection();
-            //DAWGTestResultSetUtil.toGraph(result);
-            conn.add(DAWGTestResultSetUtil.toGraph(result));
+            Map<String, Map<String, Object>> ctxItems = result.getContext().getItems();
+            final RepositoryConnection finalConn = conn;
+            result.getItems().forEach(entity -> {
+                IRI entityId = valueFactory.createIRI(appNamespace, (String) entity.get("id"));
 
-            RepositoryResult <Statement> stmts = conn.getStatements(null, null, null, true);
-            Model model = Iterations.addAll(stmts, new LinkedHashModel());
+                entity.forEach((predicate, value) -> {
+                    if (!"id".equalsIgnoreCase(predicate)) {
+                        IRI predicateIRI = buildPredicate(predicate, valueFactory, result);
 
-            model.setNamespace("rdf", RDF.NAMESPACE);
-            model.setNamespace("rdfs", RDFS.NAMESPACE);
-            model.setNamespace("foaf", FOAF.NAMESPACE);
-            model.setNamespace("ex", appNamespace);
-            Rio.write(model, System.out, RDFFormat.RDFXML);
+                        if (value instanceof Collection) {
+                            for (Object o : ((Collection) value)) {
+                                addStatement(entityId, predicate, (String) o, predicateIRI,
+                                        valueFactory, ctxItems, finalConn);
+                            }
+                        } else {
+                            addStatement(entityId, predicate, (String) value, predicateIRI,
+                                    valueFactory, ctxItems, finalConn);
+                        }
+                    }
+                });
+            });
 
         } finally {
             if(conn != null) {
@@ -114,41 +79,47 @@ public class GenericRepositoryImpl implements GenericRepository {
 
     }
 
-    @Override
-    public void query(String queryString) {
-        RepositoryConnection conn = null;
+    private void addStatement(IRI john, String predicate, String object, IRI predicateIRI,
+                              ValueFactory valueFactory, Map<String, Map<String, Object>> ctxItems,
+                              RepositoryConnection finalConn) {
 
-        try {
-            Repository repo = getManager().getRepository(repositoryId);
-            conn = repo.getConnection();
-
-            TupleQueryResult result = conn.prepareTupleQuery(QueryLanguage.SPARQL, queryString).evaluate();
-
-            RepositoryResult <Statement> stmts = conn.getStatements(null, null, null, true);
-            Model model = Iterations.addAll(stmts, new LinkedHashModel());
-            model.setNamespace("rdf", RDF.NAMESPACE);
-            model.setNamespace("rdfs", RDFS.NAMESPACE);
-            model.setNamespace("foaf", FOAF.NAMESPACE);
-            model.setNamespace("ex", appNamespace);
-            Rio.write(model, System.out, RDFFormat.JSONLD);
-
-            BindingSet set;
-            while(result.hasNext()) {
-                set = result.next();
-
-                Map<String, Object> item = new HashMap<>();
-                for(String binding: set.getBindingNames()) {
-                    //item.put(binding, set.getValue(binding).stringValue());
-                    System.out.println(binding + " " + set.getValue(binding).stringValue());
-                }
-            }
-
-        } finally {
-            if(conn != null) {
-                //conn.commit();
-                conn.close();
-            }
+        String type =  ctxItems.get(predicate).get("@type").toString();
+        IRI typeIRI;
+        if(type == null || type.trim().isEmpty()) {
+            typeIRI = XMLSchema.STRING;
+        } else {
+            typeIRI = valueFactory.createIRI(type);
         }
+
+        if (RDF.LANGSTRING.equals(typeIRI)) {
+            finalConn.add(john, predicateIRI, valueFactory.createLiteral(object, "en"));
+        } else {
+            finalConn.add(john, predicateIRI, valueFactory.createLiteral(object, typeIRI));
+        }
+    }
+
+
+    private IRI buildPredicate(String predicate, ValueFactory valueFactory, Result result) {
+        IRI predicateIRI;
+        if ("seeAlso".equalsIgnoreCase(predicate)) {
+            predicateIRI = RDFS.SEEALSO;
+        } else {
+            Map<String, Object> itemIdType = result.getContext().getItems().get(predicate);
+            predicateIRI = valueFactory.createIRI(itemIdType.get("@id").toString());
+        }
+        return predicateIRI;
+    }
+
+    @Override
+    public List<BindingSet> query(String queryString) {
+        Repository repo = getManager().getRepository(repositoryId);
+        RepositoryConnection conn = repo.getConnection();
+
+        queryString = "PREFIX geo: <http://www.w3.org/2003/01/geo/wgs84_pos#> PREFIX dbo: <http://dbpedia.org/ontology/> PREFIX foaf: <http://xmlns.com/foaf/0.1/> SELECT distinct ?id ?type ?lat ?long ?name where { ?id geo:lat ?lat .?id geo:long ?long .?id dbo:type ?type .?id foaf:name ?name }";
+        TupleQueryResult tt = conn.prepareTupleQuery(QueryLanguage.SPARQL, queryString).evaluate();
+
+        return QueryResults.stream(tt).collect(Collectors.toList());
+
     }
 
     //TODO extract this in an abstract class

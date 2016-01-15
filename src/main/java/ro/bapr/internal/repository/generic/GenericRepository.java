@@ -1,15 +1,16 @@
 package ro.bapr.internal.repository.generic;
 
-import org.openrdf.query.TupleQueryResult;
+import java.util.List;
 
-import ro.bapr.response.Result;
+import org.openrdf.query.BindingSet;
+
+import ro.bapr.service.response.Result;
 
 /**
  * Created by valentin.spac on 12/14/2015.
  */
 public interface GenericRepository {
     void save(Result result);
-    void save(TupleQueryResult result);
 
-    void query(String query);
+    List<BindingSet> query(String query);
 }

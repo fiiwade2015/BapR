@@ -1,8 +1,8 @@
 package ro.bapr.external.openmobilenetwork.service;
 
-import java.util.Collection;
-import java.util.Map;
+import java.util.List;
 
+import org.openrdf.model.Statement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,7 +20,7 @@ public class OpenMobileNetworkServiceImpl implements OpenMobileNetworkService {
     private OpenMobileNetworkRepository repo;
 
     @Override
-    public Collection<Map<String, Object>> query(String queryString) {
+    public List<Statement> query(String queryString) {
         return repo.query(queryString);
     }
 }

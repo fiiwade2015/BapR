@@ -1,6 +1,9 @@
 package ro.bapr.external.dbpedia.repository;
 
-import org.openrdf.model.Model;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.openrdf.model.Statement;
 import org.openrdf.query.GraphQueryResult;
 import org.openrdf.query.QueryLanguage;
 import org.openrdf.query.QueryResults;
@@ -22,10 +25,10 @@ public class DBpediaRepositoryImpl implements DBPediaRepository {
     private ConnectionFactory connectionFactory;
 
     @Override
-    public Model query(String queryString) {
+    public List<Statement> query(String queryString) {
         RepositoryConnection conn = connectionFactory.getConnectionFor("dbpedia");
         GraphQueryResult result = conn.prepareGraphQuery(QueryLanguage.SPARQL, queryString).evaluate();
 
-        return QueryResults.asModel(result);
+        return QueryResults.stream(result).collect(Collectors.toList());
     }
 }

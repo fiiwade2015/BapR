@@ -1,11 +1,13 @@
 package ro.bapr.external.dbpedia.repository.api;
 
-import org.openrdf.model.Model;
+import java.util.List;
+
+import org.openrdf.model.Statement;
 
 /**
  * @author Spac Valentin - Marian
  * @version 1.0 17.11.2015.
  */
 public interface DBPediaRepository {
-    Model query(String queryString);
+    List<Statement> query(String queryString);
 }

@@ -1,12 +1,15 @@
 package ro.bapr.internal.service.generic;
 
-import ro.bapr.response.Result;
+import java.util.List;
+
+import org.openrdf.query.BindingSet;
+
+import ro.bapr.service.response.Result;
 
 /**
  * Created by valentin.spac on 12/14/2015.
  */
 public interface GenericService {
     void save(Result result);
-
-    void query(String query);
+    List<BindingSet> query(String query);
 }

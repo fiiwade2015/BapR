@@ -1,4 +1,4 @@
-package ro.bapr.response;
+package ro.bapr.service.response;
 
 import java.util.Map;
 
@@ -10,14 +10,14 @@ import com.fasterxml.jackson.annotation.JsonAnyGetter;
  */
 
 public class Context {
-    private Map<String, String> items;
+    private Map<String, Map<String, Object>> items;
 
     @JsonAnyGetter
-    public Map<String, String> getItems() {
+    public Map<String, Map<String, Object>> getItems() {
         return items;
     }
 
-    public Context setItems(Map<String, String> items) {
+    public Context setItems(Map<String, Map<String, Object>> items) {
         this.items = items;
         return this;
     }

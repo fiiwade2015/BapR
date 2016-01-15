@@ -1,15 +1,16 @@
-package ro.bapr.util;
+package ro.bapr.service.response;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import org.openrdf.model.IRI;
+import org.openrdf.model.vocabulary.RDFS;
 import org.openrdf.query.algebra.TupleExpr;
 import org.openrdf.query.algebra.helpers.StatementPatternCollector;
 import org.openrdf.query.parser.ParsedQuery;
 import org.openrdf.query.parser.QueryParser;
 import org.openrdf.query.parser.sparql.SPARQLParserFactory;
 import org.springframework.stereotype.Component;
-import ro.bapr.response.Context;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * @author Spac Valentin - Marian
@@ -40,9 +41,10 @@ public class ContextCreator {
      *              {name : http://xmlns.com/foaf/0.1/name}
      *           ]
      * @param queryString query to be parsed
+     * @param variableTypes
      * @return a {@code Context} object containing the mapping (parameterName : namespace)
      */
-    public Context create(String queryString) {
+    public Context create(String queryString, Map<String, IRI> variableTypes) {
         SPARQLParserFactory factory = new SPARQLParserFactory();
         QueryParser parser = factory.getParser();
         ParsedQuery parsedQuery = parser.parseQuery(queryString, null);
@@ -51,11 +53,23 @@ public class ContextCreator {
         TupleExpr tupleExpr = parsedQuery.getTupleExpr();
         tupleExpr.visit(collector);
 
-        Map<String, String> contextItems = new HashMap<>();
+        Map<String, Map<String, Object>> contextItems = new HashMap<>();
+
         collector.getStatementPatterns()
                 .stream()
                 .filter(pattern -> tupleExpr.getBindingNames().contains(pattern.getObjectVar().getName()))
-                .forEach(pattern -> contextItems.put(pattern.getObjectVar().getName(), pattern.getPredicateVar().getValue().stringValue()));
+                .forEach(pattern -> {
+                    Map<String, Object> items = new HashMap<>();
+                    items.put("@id", pattern.getPredicateVar().getValue().stringValue());
+                    items.put("@type", variableTypes.get(pattern.getObjectVar().getName()).stringValue());
+
+                    contextItems.put(pattern.getObjectVar().getName(), items);
+                });
+
+        Map<String, Object> items2 = new HashMap<>();
+        items2.put("@id", RDFS.SEEALSO.stringValue());
+        items2.put("@type", RDFS.SEEALSO.stringValue());
+        contextItems.put("seeAlso", items2);
 
         Context ctx = new Context();
         ctx.setItems(contextItems);

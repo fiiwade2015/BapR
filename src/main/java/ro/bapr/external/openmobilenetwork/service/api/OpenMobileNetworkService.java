@@ -1,7 +1,8 @@
 package ro.bapr.external.openmobilenetwork.service.api;
 
-import java.util.Collection;
-import java.util.Map;
+import java.util.List;
+
+import org.openrdf.model.Statement;
 
 /**
  * @author Spac Valentin - Marian
@@ -9,5 +10,5 @@ import java.util.Map;
  */
 public interface OpenMobileNetworkService {
 
-    Collection<Map<String, Object>> query(String queryString);
+    List<Statement> query(String queryString);
 }

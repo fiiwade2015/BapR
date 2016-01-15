@@ -1,10 +1,13 @@
 package ro.bapr.internal.service.generic;
 
+import java.util.List;
+
+import org.openrdf.query.BindingSet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import ro.bapr.internal.repository.generic.GenericRepository;
-import ro.bapr.response.Result;
+import ro.bapr.service.response.Result;
 
 /**
  * @author Spac Valentin - Marian
@@ -23,7 +26,7 @@ public class GenericServiceImpl implements GenericService {
     }
 
     @Override
-    public void query(String query) {
-        repository.query(query);
+    public List<BindingSet> query(String query) {
+        return repository.query(query);
     }
 }

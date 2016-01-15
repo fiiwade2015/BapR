@@ -1,10 +1,10 @@
-package ro.bapr.response;
-
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
+package ro.bapr.service.response;
 
 import java.util.Collection;
 import java.util.Map;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * @author Spac Valentin - Marian

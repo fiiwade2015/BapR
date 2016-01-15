@@ -17,7 +17,7 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 
-import ro.bapr.response.Result;
+import ro.bapr.service.response.Result;
 
 /**
  * @author Spac Valentin - Marian
@@ -45,17 +45,29 @@ public class SeeAlsoAspect {
         List<String> seeAlsoUrls = Arrays.asList(seeAlso.value());
 
         Map<String, String> parameters = getSeeAlsoParameter(seeAlsoUrls);
+        final int[] idx = {0};
+        result.getItems()
+                .stream()
+                .forEach(item -> {
+            idx[0]++;
+            if(item == null) {
+                System.out.println("mata");
+            }
 
-        result.getItems().forEach(item -> {
             List<String> formattedUrls = buildSeeAlsoUrls(item, parameters, seeAlsoUrls);
-            item.put("seeAlso", formattedUrls);
+            if(item.get("seeAlso") == null) {
+                item.put("seeAlso", formattedUrls);
+            } else {
+                ((List)item.get("seeAlso")).addAll(formattedUrls);
+            }
         });
     }
 
     private List<String> buildSeeAlsoUrls(Map<String, Object> item,
-                                          Map<String, String> parameters, List<String> seeAlsoUrls) {
+                                          Map<String, String> parameters,
+                                          List<String> seeAlsoUrls) {
         List<String> resultUrls = new ArrayList<>();
-        seeAlsoUrls.forEach(url ->
+        seeAlsoUrls.stream().forEach(url ->
                 parameters.forEach((key, value) ->
                         resultUrls.add(url.replaceAll(Pattern.quote(key), item.get(value).toString()))));
 
@@ -78,9 +90,9 @@ public class SeeAlsoAspect {
         Map<String, String> params = new HashMap<>();
         Pattern pattern = Pattern.compile("/\\{\\w+\\}/");
 
-        seeAlsoUrls.forEach( url -> {
+        seeAlsoUrls.stream().forEach(url -> {
             Matcher matcher = pattern.matcher(url);
-            while(matcher.find()) {
+            while (matcher.find()) {
                 String param = matcher.group();
                 params.put(param.substring(1, param.length() - 1),
                         param.substring(2, param.length() - 2));

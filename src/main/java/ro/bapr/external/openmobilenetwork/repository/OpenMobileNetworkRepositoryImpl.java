@@ -1,15 +1,18 @@
 package ro.bapr.external.openmobilenetwork.repository;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Map;
+import java.util.List;
+import java.util.stream.Collectors;
 
+import org.openrdf.model.Statement;
+import org.openrdf.query.GraphQueryResult;
+import org.openrdf.query.QueryLanguage;
+import org.openrdf.query.QueryResults;
+import org.openrdf.repository.RepositoryConnection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import ro.bapr.external.api.factory.ConnectionFactory;
 import ro.bapr.external.openmobilenetwork.repository.api.OpenMobileNetworkRepository;
-import ro.bapr.util.ContextCreator;
 
 /**
  * @author Spac Valentin - Marian
@@ -22,25 +25,10 @@ public class OpenMobileNetworkRepositoryImpl implements OpenMobileNetworkReposit
     private ConnectionFactory connectionFactory;
 
     @Override
-    public Collection<Map<String, Object>> query(String queryString) {
-        /*RepositoryConnection conn = connectionFactory.getConnectionFor("omn");
-        TupleQueryResult result = conn.prepareTupleQuery(QueryLanguage.SPARQL, queryString).evaluate();
-*/
-        ContextCreator r = new ContextCreator();
-        r.create(queryString);
+    public List<Statement> query(String queryString) {
+        RepositoryConnection conn = connectionFactory.getConnectionFor("omn");
+        GraphQueryResult result = conn.prepareGraphQuery(QueryLanguage.SPARQL, queryString).evaluate();
 
-        Collection<Map<String, Object>> results = new ArrayList<>();
-        /*BindingSet set;
-        while(result.hasNext()) {
-            set = result.next();
-
-            Map<String, Object> item = new HashMap<>();
-            for(String binding: set.getBindingNames()) {
-                item.put(binding, set.getValue(binding).stringValue());
-            }
-            results.add(item);
-        }*/
-
-        return results;
+        return QueryResults.stream(result).collect(Collectors.toList());
     }
 }

@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import ro.bapr.aop.SeeAlso;
-import ro.bapr.response.Result;
 import ro.bapr.service.EntityService;
+import ro.bapr.service.response.Result;
 
 /**
  * @author Spac Valentin - Marian
