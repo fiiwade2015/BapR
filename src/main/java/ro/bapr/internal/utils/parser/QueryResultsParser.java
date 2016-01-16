@@ -46,7 +46,7 @@ public abstract class QueryResultsParser {
                     Map<String, Object> itemBindings = new HashMap<>();
 
                     set.getBindingNames().stream()
-                            .parallel()
+                            //.parallel()
                             .forEach(binding -> {
                                 Value value = set.getValue(binding);
                                 String bindingName = set.getBinding(binding).getName();
@@ -55,10 +55,16 @@ public abstract class QueryResultsParser {
                                 updateVariableTypes(variableTypes, bindingName, value);
 
                                 if ("id".equalsIgnoreCase(bindingName)) {
-                                    stringValue = addSeeAlso(itemBindings, (IRI) value, stringValue, variableTypes);
+                                   // stringValue = addSeeAlso(itemBindings, (IRI) value, stringValue, variableTypes);
+                                    stringValue = ((IRI)value).getLocalName();
                                 }
-
-                                itemBindings.put(bindingName, stringValue);
+                                if("seeAlso".equalsIgnoreCase(bindingName)) {
+                                    List<String> seeAlso = new ArrayList<>();
+                                    seeAlso.add(stringValue);
+                                    itemBindings.put(bindingName, seeAlso);
+                                } else {
+                                    itemBindings.put(bindingName, stringValue);
+                                }
                             });
 
                     items.add(itemBindings);
@@ -72,7 +78,18 @@ public abstract class QueryResultsParser {
     }
 
     private static String addSeeAlso(Map<String, Object> itemBindings, IRI value, String stringValue, ConcurrentMap<String, IRI> variableTypes) {
-        List<String> seeAlso = (List<String>)itemBindings.get("seeAlso");
+        List<String> seeAlso = null;
+        Object genericSeeAlso = itemBindings.get("seeAlso");
+
+        if(genericSeeAlso == null) {
+            seeAlso = new ArrayList<>();
+        } else if(genericSeeAlso instanceof List){
+            seeAlso = (List)genericSeeAlso;
+        } else if(genericSeeAlso instanceof String) {
+            seeAlso = new ArrayList<>();
+            seeAlso.add((String)genericSeeAlso);
+        }
+
         if(seeAlso == null) {
             seeAlso = new ArrayList<>();
         }
@@ -144,7 +161,7 @@ public abstract class QueryResultsParser {
 
     private static List<Statement> getBindingsForSolution(List<Statement> solutionBindings, Statement solution) {
         return solutionBindings.stream()
-                .parallel()
+                //.parallel()
                 .filter(binding ->
                         binding.getSubject().stringValue().equalsIgnoreCase(solution.getObject().stringValue()))
                 .collect(Collectors.toList());

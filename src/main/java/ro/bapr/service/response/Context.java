@@ -3,6 +3,9 @@ package ro.bapr.service.response;
 import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.openrdf.model.IRI;
+import org.openrdf.model.Value;
 
 /**
  * @author Spac Valentin - Marian
@@ -12,6 +15,9 @@ import com.fasterxml.jackson.annotation.JsonAnyGetter;
 public class Context {
     private Map<String, Map<String, Object>> items;
 
+    @JsonIgnore
+    private Map<IRI, Value> additionalProperties;
+
     @JsonAnyGetter
     public Map<String, Map<String, Object>> getItems() {
         return items;
@@ -19,6 +25,15 @@ public class Context {
 
     public Context setItems(Map<String, Map<String, Object>> items) {
         this.items = items;
+        return this;
+    }
+
+    public Map<IRI, Value> getAdditionalProperties() {
+        return additionalProperties;
+    }
+
+    public Context setAdditionalProperties(Map<IRI, Value> additionalProperties) {
+        this.additionalProperties = additionalProperties;
         return this;
     }
 

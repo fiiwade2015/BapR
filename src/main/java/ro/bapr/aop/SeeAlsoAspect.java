@@ -6,16 +6,16 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Component;
 
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Component;
 
 import ro.bapr.service.response.Result;
 
@@ -45,22 +45,18 @@ public class SeeAlsoAspect {
         List<String> seeAlsoUrls = Arrays.asList(seeAlso.value());
 
         Map<String, String> parameters = getSeeAlsoParameter(seeAlsoUrls);
-        final int[] idx = {0};
         result.getItems()
                 .stream()
                 .forEach(item -> {
-            idx[0]++;
-            if(item == null) {
-                System.out.println("mata");
-            }
+                    Objects.requireNonNull(item, "Map with mapped properties (name, id, type, etc) IS NULL, MF. WHY???");
 
-            List<String> formattedUrls = buildSeeAlsoUrls(item, parameters, seeAlsoUrls);
-            if(item.get("seeAlso") == null) {
-                item.put("seeAlso", formattedUrls);
-            } else {
-                ((List)item.get("seeAlso")).addAll(formattedUrls);
-            }
-        });
+                    List<String> formattedUrls = buildSeeAlsoUrls(item, parameters, seeAlsoUrls);
+                    if (item.get("seeAlso") == null) {
+                        item.put("seeAlso", formattedUrls);
+                    } else {
+                        ((List) item.get("seeAlso")).addAll(formattedUrls);
+                    }
+                });
     }
 
     private List<String> buildSeeAlsoUrls(Map<String, Object> item,

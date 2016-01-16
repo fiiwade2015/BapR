@@ -67,6 +67,10 @@ public class GenericRepositoryImpl implements GenericRepository {
                                     valueFactory, ctxItems, finalConn);
                         }
                     }
+
+                    //add additional properties
+                    result.getContext().getAdditionalProperties()
+                            .forEach((property, object) -> finalConn.add(entityId, property, object));
                 });
             });
 
@@ -101,6 +105,7 @@ public class GenericRepositoryImpl implements GenericRepository {
 
     private IRI buildPredicate(String predicate, ValueFactory valueFactory, Result result) {
         IRI predicateIRI;
+        //this "if" statement may be useless due to later changes. Please verify
         if ("seeAlso".equalsIgnoreCase(predicate)) {
             predicateIRI = RDFS.SEEALSO;
         } else {
@@ -115,7 +120,6 @@ public class GenericRepositoryImpl implements GenericRepository {
         Repository repo = getManager().getRepository(repositoryId);
         RepositoryConnection conn = repo.getConnection();
 
-        queryString = "PREFIX geo: <http://www.w3.org/2003/01/geo/wgs84_pos#> PREFIX dbo: <http://dbpedia.org/ontology/> PREFIX foaf: <http://xmlns.com/foaf/0.1/> SELECT distinct ?id ?type ?lat ?long ?name where { ?id geo:lat ?lat .?id geo:long ?long .?id dbo:type ?type .?id foaf:name ?name }";
         TupleQueryResult tt = conn.prepareTupleQuery(QueryLanguage.SPARQL, queryString).evaluate();
 
         return QueryResults.stream(tt).collect(Collectors.toList());

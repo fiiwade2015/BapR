@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.openrdf.model.IRI;
+import org.openrdf.model.Value;
 import org.openrdf.model.vocabulary.RDFS;
 import org.openrdf.query.algebra.TupleExpr;
 import org.openrdf.query.algebra.helpers.StatementPatternCollector;
@@ -54,25 +55,34 @@ public class ContextCreator {
         tupleExpr.visit(collector);
 
         Map<String, Map<String, Object>> contextItems = new HashMap<>();
+        Map<IRI, Value> additionalProperties = new HashMap<>();
 
         collector.getStatementPatterns()
                 .stream()
-                .filter(pattern -> tupleExpr.getBindingNames().contains(pattern.getObjectVar().getName()))
                 .forEach(pattern -> {
-                    Map<String, Object> items = new HashMap<>();
-                    items.put("@id", pattern.getPredicateVar().getValue().stringValue());
-                    items.put("@type", variableTypes.get(pattern.getObjectVar().getName()).stringValue());
+                    if (tupleExpr.getBindingNames().contains(pattern.getObjectVar().getName())) {
+                        Map<String, Object> items = buildContextItemMap(pattern.getPredicateVar().getValue().stringValue(),
+                                variableTypes.get(pattern.getObjectVar().getName()).stringValue());
 
-                    contextItems.put(pattern.getObjectVar().getName(), items);
+                        contextItems.put(pattern.getObjectVar().getName(), items);
+                    } else if("id".equalsIgnoreCase(pattern.getSubjectVar().getName())){
+                        additionalProperties.put((IRI)(pattern.getPredicateVar().getValue()), pattern.getObjectVar().getValue());
+                    }
                 });
 
-        Map<String, Object> items2 = new HashMap<>();
-        items2.put("@id", RDFS.SEEALSO.stringValue());
-        items2.put("@type", RDFS.SEEALSO.stringValue());
-        contextItems.put("seeAlso", items2);
+        contextItems.put("seeAlso", buildContextItemMap(RDFS.SEEALSO.stringValue(), RDFS.SEEALSO.stringValue()));
 
         Context ctx = new Context();
         ctx.setItems(contextItems);
+        ctx.setAdditionalProperties(additionalProperties);
         return ctx;
+    }
+
+    public static Map<String, Object> buildContextItemMap(Object id, Object type) {
+        Map<String, Object> items = new HashMap<>();
+        items.put("@id", id);
+        items.put("@type", type);
+
+        return items;
     }
 }

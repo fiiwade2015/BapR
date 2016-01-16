@@ -57,14 +57,17 @@ public class EntityService {
 
         //first query local db
         boolean saveData = false;
-        List<BindingSet> queryResult = genericService.query(queryString);
-        ParsedQueryResult parsedResults = QueryResultsParser.parseBindingSets(queryResult);
+        ParsedQueryResult parsedResults;
 
-        //if no info extracted from local db, query external service
-        if(parsedResults == null) {
-            List<Statement> queryResults = dbPediaRepository.query(queryString);
+        List<BindingSet> queryResult = genericService.query(queryString);
+        if(queryResult != null && !queryResult.isEmpty()) {
+            parsedResults = QueryResultsParser.parseBindingSets(queryResult);
+        } else {
+            //if no info extracted from local db, query external service
             saveData = true;
+            List<Statement> queryResults = dbPediaRepository.query(queryString);
             parsedResults = QueryResultsParser.parseStatements(queryResults);
+
         }
 
         Context ctx = contextCreator.create(queryString, parsedResults.getVariableTypes());
@@ -74,7 +77,6 @@ public class EntityService {
         result.setContext(ctx);
 
         if(saveData) {
-            //save entities, trebuie pus chestia aia cu a dbo:Place
             genericService.save(result);
         }
 
@@ -93,14 +95,30 @@ public class EntityService {
                 .replaceAll(":long:", String.valueOf(lng))
                 .replaceAll(":radius:", String.valueOf(radius));
 
-        List<Statement> queryResults =  wifiService.query(queryString);
-        ParsedQueryResult parsedResults = QueryResultsParser.parseStatements(queryResults);
+        //first query local db
+        boolean saveData = false;
+        ParsedQueryResult parsedResults;
+
+        List<BindingSet> queryResult = genericService.query(queryString);
+        if(queryResult != null && !queryResult.isEmpty()) {
+            parsedResults = QueryResultsParser.parseBindingSets(queryResult);
+        } else {
+            //if no info extracted from local db, query external service
+            saveData = true;
+            List<BindingSet> queryResults = wifiService.query(queryString);
+            parsedResults = QueryResultsParser.parseBindingSets(queryResults);
+
+        }
 
         Context ctx = contextCreator.create(queryString, parsedResults.getVariableTypes());
 
         Result result = new Result();
         result.setItems(parsedResults.getResultItems());
         result.setContext(ctx);
+
+        if(saveData) {
+            genericService.save(result);
+        }
 
         return result;
     }

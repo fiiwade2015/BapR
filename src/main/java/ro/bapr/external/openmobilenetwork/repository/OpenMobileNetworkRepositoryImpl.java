@@ -3,10 +3,10 @@ package ro.bapr.external.openmobilenetwork.repository;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.openrdf.model.Statement;
-import org.openrdf.query.GraphQueryResult;
+import org.openrdf.query.BindingSet;
 import org.openrdf.query.QueryLanguage;
 import org.openrdf.query.QueryResults;
+import org.openrdf.query.TupleQueryResult;
 import org.openrdf.repository.RepositoryConnection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -25,9 +25,9 @@ public class OpenMobileNetworkRepositoryImpl implements OpenMobileNetworkReposit
     private ConnectionFactory connectionFactory;
 
     @Override
-    public List<Statement> query(String queryString) {
+    public List<BindingSet> query(String queryString) {
         RepositoryConnection conn = connectionFactory.getConnectionFor("omn");
-        GraphQueryResult result = conn.prepareGraphQuery(QueryLanguage.SPARQL, queryString).evaluate();
+        TupleQueryResult result = conn.prepareTupleQuery(QueryLanguage.SPARQL, queryString).evaluate();
 
         return QueryResults.stream(result).collect(Collectors.toList());
     }
