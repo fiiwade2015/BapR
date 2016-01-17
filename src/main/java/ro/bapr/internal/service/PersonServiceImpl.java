@@ -1,21 +1,23 @@
 package ro.bapr.internal.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+
 import ro.bapr.internal.model.Person;
 import ro.bapr.internal.service.api.PersonGraphService;
 import ro.bapr.internal.service.api.PersonNotFound;
 import ro.bapr.internal.service.api.PersonService;
 import ro.bapr.internal.service.api.PersonSqlService;
 
-import java.util.List;
-
 /**
  * @author Spac Valentin - Marian
  * @version 1.0 15.11.2015.
  */
 @Service
+@Deprecated
 public class PersonServiceImpl implements PersonService {
 
     @Qualifier("personGraphServiceImpl")

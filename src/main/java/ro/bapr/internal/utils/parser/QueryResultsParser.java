@@ -17,6 +17,8 @@ import org.openrdf.model.vocabulary.RDFS;
 import org.openrdf.model.vocabulary.XMLSchema;
 import org.openrdf.query.BindingSet;
 
+import ro.bapr.internal.model.ParsedQueryResult;
+
 /**
  * @author Spac Valentin - Marian
  * @version 1.0 15.01.2016.

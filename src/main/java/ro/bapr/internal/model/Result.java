@@ -1,4 +1,4 @@
-package ro.bapr.services.response;
+package ro.bapr.internal.model;
 
 import java.util.Collection;
 import java.util.Map;

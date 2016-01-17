@@ -14,6 +14,7 @@ import ro.bapr.internal.service.api.PersonSqlService;
  * Created by valentin.spac on 11/10/2015.
  */
 @Service
+@Deprecated
 public class PersonSqlServiceImpl implements PersonSqlService {
 
     @Resource

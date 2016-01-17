@@ -1,4 +1,4 @@
-package ro.bapr.services;
+package ro.bapr.internal.service;
 
 import java.util.List;
 import java.util.Optional;
@@ -10,18 +10,19 @@ import org.springframework.stereotype.Service;
 
 import ro.bapr.external.dbpedia.repository.api.DBPediaRepository;
 import ro.bapr.external.openmobilenetwork.repository.api.OpenMobileNetworkRepository;
+import ro.bapr.internal.service.api.EntityService;
 import ro.bapr.internal.service.generic.GenericService;
-import ro.bapr.internal.utils.parser.ParsedQueryResult;
+import ro.bapr.internal.model.ParsedQueryResult;
 import ro.bapr.internal.utils.parser.QueryResultsParser;
-import ro.bapr.services.response.Context;
-import ro.bapr.services.response.ContextCreator;
-import ro.bapr.services.response.Result;
+import ro.bapr.internal.model.Context;
+import ro.bapr.internal.utils.ContextCreator;
+import ro.bapr.internal.model.Result;
 
 /**
  * Created by valentin.spac on 12/11/2015.
  */
 @Service
-public class EntityService {
+public class EntityServiceImpl implements EntityService {
 
     //region Class members
     @Autowired

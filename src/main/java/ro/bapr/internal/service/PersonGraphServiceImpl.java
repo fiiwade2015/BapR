@@ -12,6 +12,7 @@ import ro.bapr.internal.service.api.PersonGraphService;
  * @version 1.0 15.11.2015.
  */
 @Service
+@Deprecated
 public class PersonGraphServiceImpl implements PersonGraphService {
     private final Logger log = LogManager.getLogger(PersonGraphServiceImpl.class);
     @Autowired

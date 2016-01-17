@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@Deprecated
 public class LogoutController {
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(LogoutController.class);

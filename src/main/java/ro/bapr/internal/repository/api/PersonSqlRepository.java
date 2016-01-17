@@ -7,6 +7,7 @@ import ro.bapr.internal.model.Person;
  * @author Spac Valentin - Marian
  * @version 1.0 15.11.2015.
  */
+@Deprecated
 public interface PersonSqlRepository extends JpaRepository<Person, Integer> {
     Person findByName(String name);
     Person findByEmail(String email);

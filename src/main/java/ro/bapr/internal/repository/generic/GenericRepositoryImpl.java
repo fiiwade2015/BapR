@@ -16,36 +16,23 @@ import org.openrdf.query.QueryResults;
 import org.openrdf.query.TupleQueryResult;
 import org.openrdf.repository.Repository;
 import org.openrdf.repository.RepositoryConnection;
-import org.openrdf.repository.manager.LocalRepositoryManager;
 import org.springframework.stereotype.Service;
 
-import ro.bapr.internal.repository.GraphRepositoryManager;
-import ro.bapr.services.response.Result;
+import ro.bapr.internal.model.Result;
+import ro.bapr.internal.repository.api.AbstractRepository;
 
 /**
  * @author Spac Valentin - Marian
  * @version 1.0 14.12.2015.
  */
 @Service
-public class GenericRepositoryImpl implements GenericRepository {
-
-    //TODO extract this in an abstract class
-    @org.springframework.beans.factory.annotation.Value("${sesame.config.repository.id}")
-    private String repositoryId;
-    @org.springframework.beans.factory.annotation.Value("${sesame.config.base.dir}")
-    private String baseDir;
-    @org.springframework.beans.factory.annotation.Value("${sesame.config.storage.indexes}")
-    private String indexes;
-    @org.springframework.beans.factory.annotation.Value("${sesame.app.namespace}")
-    private String appNamespace;
-
-    private LocalRepositoryManager manager;
+public class GenericRepositoryImpl extends AbstractRepository implements GenericRepository {
 
     @Override
     public void save(Result result) {
         RepositoryConnection conn = null;
         try {
-            Repository repo = getManager().getRepository(repositoryId);
+            Repository repo = getRepository();
             ValueFactory valueFactory = repo.getValueFactory();
             conn = repo.getConnection();
             Map<String, Map<String, Object>> ctxItems = result.getContext().getItems();
@@ -117,7 +104,7 @@ public class GenericRepositoryImpl implements GenericRepository {
 
     @Override
     public List<BindingSet> query(String queryString) {
-        Repository repo = getManager().getRepository(repositoryId);
+        Repository repo = this.getRepository();
         RepositoryConnection conn = repo.getConnection();
 
         TupleQueryResult tt = conn.prepareTupleQuery(QueryLanguage.SPARQL, queryString).evaluate();
@@ -126,12 +113,5 @@ public class GenericRepositoryImpl implements GenericRepository {
 
     }
 
-    //TODO extract this in an abstract class
-    private LocalRepositoryManager getManager() {
-        if(manager == null) {
-            manager = GraphRepositoryManager.getInstance(repositoryId, baseDir, indexes).getSesameManager();
-        }
 
-        return manager;
-    }
 }

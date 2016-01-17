@@ -1,5 +1,7 @@
 package ro.bapr.internal.repository;
 
+import java.io.File;
+
 import org.openrdf.repository.config.RepositoryConfig;
 import org.openrdf.repository.config.RepositoryImplConfig;
 import org.openrdf.repository.manager.LocalRepositoryManager;
@@ -7,12 +9,11 @@ import org.openrdf.repository.sail.config.SailRepositoryConfig;
 import org.openrdf.sail.config.SailImplConfig;
 import org.openrdf.sail.nativerdf.config.NativeStoreConfig;
 
-import java.io.File;
-
 /**
  * @author Spac Valentin - Marian
  * @version 1.0 16.11.2015.
  */
+@Deprecated
 public class GraphRepositoryManager {
 
     private final String repositoryId;

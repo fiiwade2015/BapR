@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import ro.bapr.internal.repository.generic.GenericRepository;
-import ro.bapr.services.response.Result;
+import ro.bapr.internal.model.Result;
 
 /**
  * @author Spac Valentin - Marian

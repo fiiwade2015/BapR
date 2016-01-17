@@ -1,5 +1,7 @@
 package ro.bapr.internal.repository;
 
+import java.io.ByteArrayOutputStream;
+
 import info.aduna.iteration.Iterations;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -20,14 +22,13 @@ import org.openrdf.rio.RDFFormat;
 import org.openrdf.rio.Rio;
 import org.springframework.beans.factory.annotation.Value;
 
-import java.io.ByteArrayOutputStream;
-
 /**
  * @author Spac Valentin - Marian
  * @version 1.0 15.11.2015.
  */
 
 @org.springframework.stereotype.Repository
+@Deprecated
 public class PersonGraphRepositoryImpl {
     private final Logger log = LogManager.getLogger(PersonGraphRepositoryImpl.class);
 

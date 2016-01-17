@@ -1,4 +1,4 @@
-package ro.bapr.internal.utils.parser;
+package ro.bapr.internal.model;
 
 import java.util.List;
 import java.util.Map;

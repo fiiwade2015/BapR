@@ -1,4 +1,4 @@
-package ro.bapr.services.response;
+package ro.bapr.internal.utils;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -13,7 +13,7 @@ import org.openrdf.query.parser.QueryParser;
 import org.openrdf.query.parser.sparql.SPARQLParserFactory;
 import org.springframework.stereotype.Component;
 
-import ro.bapr.services.response.Context;
+import ro.bapr.internal.model.Context;
 
 /**
  * @author Spac Valentin - Marian

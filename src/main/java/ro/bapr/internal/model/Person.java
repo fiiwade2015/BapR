@@ -1,7 +1,5 @@
 package ro.bapr.internal.model;
 
-import java.io.Serializable;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -10,6 +8,7 @@ import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 
 import org.hibernate.validator.constraints.Email;
 
@@ -19,6 +18,7 @@ import org.hibernate.validator.constraints.Email;
  */
 @Entity
 @Table(name = "person")
+@Deprecated
 public class Person implements Serializable {
 
 	private static final long serialVersionUID = -6825661847491980785L;

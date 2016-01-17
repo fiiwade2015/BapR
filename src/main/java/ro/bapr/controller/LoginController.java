@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import ro.bapr.internal.service.api.PersonService;
 
 @Controller
+@Deprecated
 public class LoginController {
 	private final Logger logger = LogManager.getLogger(LoginController.class);
 
