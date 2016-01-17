@@ -1,4 +1,4 @@
-package ro.bapr.service.response;
+package ro.bapr.services.response;
 
 import java.util.Map;
 

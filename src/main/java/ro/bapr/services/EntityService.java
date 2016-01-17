@@ -1,4 +1,4 @@
-package ro.bapr.service;
+package ro.bapr.services;
 
 import java.util.List;
 import java.util.Optional;
@@ -13,9 +13,9 @@ import ro.bapr.external.openmobilenetwork.repository.api.OpenMobileNetworkReposi
 import ro.bapr.internal.service.generic.GenericService;
 import ro.bapr.internal.utils.parser.ParsedQueryResult;
 import ro.bapr.internal.utils.parser.QueryResultsParser;
-import ro.bapr.service.response.Context;
-import ro.bapr.service.response.ContextCreator;
-import ro.bapr.service.response.Result;
+import ro.bapr.services.response.Context;
+import ro.bapr.services.response.ContextCreator;
+import ro.bapr.services.response.Result;
 
 /**
  * Created by valentin.spac on 12/11/2015.

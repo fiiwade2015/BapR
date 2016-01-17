@@ -1,4 +1,6 @@
-package ro.bapr;
+package ro.bapr.aop;
+
+import java.util.Arrays;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -10,15 +12,13 @@ import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.stereotype.Component;
 
-import java.util.Arrays;
-
 /**
  * @author Spac Valentin - Marian
  * @version 1.0 21.11.2015.
  */
 @Aspect
 @Component
-public class TracingAspect {
+public class LoggerAspect {
     private final Logger log = LogManager.getLogger();
 
     @Pointcut("execution(* ro.bapr..*(..))")
