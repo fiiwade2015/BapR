@@ -1,5 +1,6 @@
 package ro.bapr.internal.repository.api;
 
+import ro.bapr.internal.model.Journey;
 import ro.bapr.internal.model.RegisterModel;
 
 /**
@@ -9,4 +10,5 @@ import ro.bapr.internal.model.RegisterModel;
 public interface UserRepository {
 
     String registerUser(RegisterModel model);
+    String addJourney(Journey journey);
 }

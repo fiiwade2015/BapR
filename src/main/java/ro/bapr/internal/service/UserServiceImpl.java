@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import ro.bapr.internal.model.Journey;
 import ro.bapr.internal.model.RegisterModel;
 import ro.bapr.internal.repository.api.UserRepository;
 import ro.bapr.internal.repository.generic.GenericRepository;
@@ -39,6 +40,12 @@ public class UserServiceImpl implements UserService {
         }
 
         return response;
+    }
+
+    @Override
+    public ServiceResponse<String> addJourney(Journey journey) {
+        userRepo.addJourney(journey);
+        return null;
     }
 
     private boolean userExists(RegisterModel model) {

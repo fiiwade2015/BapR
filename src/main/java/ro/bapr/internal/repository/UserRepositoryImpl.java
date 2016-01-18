@@ -11,6 +11,7 @@ import org.openrdf.model.vocabulary.XMLSchema;
 import org.openrdf.repository.RepositoryConnection;
 import org.springframework.stereotype.Repository;
 
+import ro.bapr.internal.model.Journey;
 import ro.bapr.internal.model.RegisterModel;
 import ro.bapr.internal.repository.api.AbstractRepository;
 import ro.bapr.internal.repository.api.UserRepository;
@@ -48,6 +49,24 @@ public class UserRepositoryImpl extends AbstractRepository implements UserReposi
                     valueFactory.createLiteral(Double.toString(model.getLongitude()), XMLSchema.FLOAT));
 
             return userId;
+        } finally {
+            if(conn != null) {
+                conn.commit();
+                conn.close();
+            }
+        }
+    }
+
+    @Override
+    public String addJourney(Journey journey) {
+        RepositoryConnection conn = null;
+        try {
+            org.openrdf.repository.Repository repo = getRepository();
+            ValueFactory valueFactory = repo.getValueFactory();
+            conn = repo.getConnection();
+
+
+            return null;
         } finally {
             if(conn != null) {
                 conn.commit();
