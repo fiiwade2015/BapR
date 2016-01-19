@@ -42,6 +42,11 @@ public class EntityServiceImpl implements EntityService {
 
     @org.springframework.beans.factory.annotation.Value("${wifi.get.all}")
     private String GET_ALL_WIFI;
+    
+    @org.springframework.beans.factory.annotation.Value("${entity.get.details}")
+    private String GET_ENTITY_DETAILS;
+    
+    
     //endregion
 
     public Result getEntities(double lat, double lng, Optional<Double> optionalRadius) {
@@ -128,5 +133,40 @@ public class EntityServiceImpl implements EntityService {
 
         return 1d;
     }
+
+
+	@Override
+	public Result getEntityDetails(String resourceId) {
+		String queryString = GET_ENTITY_DETAILS.replaceAll(":id:", String.valueOf(resourceId));
+		
+		//first query local db
+        boolean saveData = false;
+        ParsedQueryResult parsedResults;
+
+        List<BindingSet> queryResult = genericService.query(queryString);
+        if(queryResult != null && !queryResult.isEmpty()) {
+            parsedResults = QueryResultsParser.parseBindingSets(queryResult);
+        } else {
+            //if no info extracted from local db, query external service
+            saveData = true;
+            List<Statement> queryResults = dbPediaRepository.query(queryString);
+            parsedResults = QueryResultsParser.parseStatements(queryResults);
+
+        }
+
+        Context ctx = contextCreator.create(queryString, parsedResults.getVariableTypes());
+
+        Result result = new Result();
+        result.setItems(parsedResults.getResultItems());
+        result.setContext(ctx);
+
+        if(saveData) {
+            genericService.save(result);
+        }
+
+        return result;
+	}
+
+
 
 }

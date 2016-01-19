@@ -12,4 +12,6 @@ public interface EntityService {
     Result getEntities(double lat, double lng, Optional<Double> optionalRadius);
 
     Result getWifi(double lat, double lng, Optional<Double> optionalRadius);
+    
+    Result getEntityDetails(String resourceId);
 }

@@ -44,4 +44,16 @@ public class EntityController {
 
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
+    
+    /**
+     * Method for getting details (such as: thumbnail, externalLinks, abstract and name) associated with a resourceId
+     * @param resourceId - The id of the resource
+     * @return
+     */
+    @RequestMapping(value = Endpoint.ENTITIES + "/{id}" + Endpoint.DETAILS, method = RequestMethod.GET)
+    public ResponseEntity<Result> getEntityDetails(@RequestParam("id") String resourceId){
+    	Result result = service.getEntityDetails(resourceId);
+    			
+    	return new ResponseEntity<>(result, HttpStatus.OK);
+    }
 }
