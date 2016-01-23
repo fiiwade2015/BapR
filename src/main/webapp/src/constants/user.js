@@ -6,5 +6,6 @@ export default createConstants(
 	'EDIT_PLAN',
 	'ADD_LOCATION',
 	'REMOVE_LOCATION',
-	'START_JOURNEY'
+	'START_JOURNEY',
+	'USER_LOCATION'
 );

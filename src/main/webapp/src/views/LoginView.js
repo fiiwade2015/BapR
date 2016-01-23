@@ -23,6 +23,18 @@ export class LoginView extends React.Component {
 	    user: React.PropTypes.object
 	}
 
+	componentDidMount(){
+
+		if (navigator.geolocation) {
+		    navigator.geolocation.getCurrentPosition((position) => {
+		    	this.props.saveUserLocation(position.coords.latitude, position.coords.longitude);
+		    });
+		} else {
+		    alert('It seems like Geolocation, which is required for this page, is not enabled in your browser. Please use a browser which supports it.');
+		}
+
+	}
+
 	render () {
 		var errorElement;
 		if(this.showError) {

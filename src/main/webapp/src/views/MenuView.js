@@ -11,6 +11,7 @@ import HealthView             from './HealthView';
 import PlaneView              from './PlaneView';
 import SettingsView           from './SettingsView'
 
+
 var UserApi = require( '../api/userApi');
 const mapStateToProps = (state) => ({
   user : state.user,
@@ -75,7 +76,6 @@ export class MenuView extends React.Component {
 
   constructor (props, context) {
     super(props, context);
-    console.log(this);
     this.liElementClicked = this.liElementClicked.bind(this);
   }
 

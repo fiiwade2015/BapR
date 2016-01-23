@@ -5,6 +5,14 @@ import counterActions         from 'actions/counter';
 import userAuthAction         from 'actions/user';
 import { Link }               from 'react-router';
 import Menu                   from './MenuView'
+
+import Map                    from './MapView';
+import OptionsMenu            from './LocationOptionsView';
+import Filter                 from './Filter';
+import FilterMenu             from './FilterView';
+
+
+//var FilterMenu = require('./FilterView');
 var UserApi = require( '../api/userApi');
 
 // We define mapStateToProps where we'd normally use
@@ -34,7 +42,10 @@ export class HomeView extends React.Component {
   render () {
     return (
       <div className="wrapper">
+        <Map />
         <Menu  {...this.props} />
+        <FilterMenu id="filter-menu"/>
+        <OptionsMenu id="options-menu"/>
       </div>
     );
   }

@@ -5,6 +5,7 @@ import { ADD_LOCATION }	 	from 'constants/user';
 import { REMOVE_LOCATION }	from 'constants/user';
 import {EDIT_PLAN}			from 'constants/user';
 import {START_JOURNEY} 		from 'constants/user';
+import {USER_LOCATION} 		from 'constants/user';
 
 export default {
 	loginSuccess: (user) => {
@@ -55,6 +56,15 @@ export default {
 			payload: {
 				planId: planId,
 				locationId: locationId
+			}
+		}
+	},
+	saveUserLocation : (lat, long) => {
+		return {
+			type: USER_LOCATION,
+			payload: {
+				lat,
+				long
 			}
 		}
 	}

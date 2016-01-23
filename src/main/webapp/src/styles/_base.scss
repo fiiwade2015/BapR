@@ -6,7 +6,10 @@
 .Menu {
 	margin: 0px;
 	padding:0px;
-	position: relative;
+	position: fixed;
+	top: 0;
+	left: 0;
+	background-color: white;
 }
 .itemsMenu {
 	.hide {
@@ -56,3 +59,23 @@
     white-space: nowrap;
     vertical-align: middle;
 }
+
+#options-menu{
+	position: fixed;
+	right: 0;
+	bottom: 0;
+}
+
+#filter-menu{
+	position: fixed;
+    top: 0;
+    right: 0;
+}
+
+#filter-menu li{
+	display: inline;
+	padding-right: 20px;
+}
+
+
+li {list-style-type: none;}

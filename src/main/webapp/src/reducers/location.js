@@ -6,67 +6,24 @@ import { EDIT_PLAN}			from 'constants/user';
 import { ADD_LOCATION }	 	from 'constants/user';
 import { REMOVE_LOCATION }	from 'constants/user';
 import {START_JOURNEY}		from 'constants/user';
-import {USER_LOCATION}		from 'constants/user';
+
 const initialState = {
-	user: {
-		id : null,
-		userAuth :'guest',
-		name : '',
-		loginStatus : false,
-		currentLocation: {
-			lat: 0,
-			long: 0
-		},
-		plans : [
-			{
-				id : 1,
-				name : 'Journey',
-				locations : [
-					{
-						id: 1,
-						name: 'Tokyo University',
-						geoData : {
-							lat: 43.45,
-							long: 25.33,
-						},
-						visited: false
-					}
-				],
-				status : 'inProgress'
-			},{
-				id : 2,
-				name : 'One Ok Rock',
-				locations :[
-					{
-						id: 1,
-						name: 'Tokyo',
-						geoData: {
-							lat: 45.32,
-							long: 23.44
-						},
-						visited: true
-					},
-					{
-						id: 2,
-						name: 'Osaka',
-						geoData: {
-							lat: 34.33,
-							long: 33.33
-						},
-						visited: true
-					}
-				],
-				status : 'finished'
-			}
-		]
+	id: null,
+	geoData: {
+		lat: null,
+		long: null
 	},
-	errorMessage: '',
-	editPlans: {
-		planId : null,
-		status : 'stop'
-	},
-	locations: [{id: 1, name:'Tokyo'},{id: 2, name: 'Osaka'}]
-};
+	name: '',
+	type: '',
+
+	//De adaugat si restul
+
+	flags:{
+		visited: false,
+		partOfJourney: false
+	}
+}
+
 
 export default createReducer(initialState, {
 	[LOGIN_SUCCESS] : (state, action) => {
@@ -129,12 +86,6 @@ export default createReducer(initialState, {
 				}
 			}
 		}
-		return temp;
-	},
-	[USER_LOCATION] : (state, action) => {
-		let temp =  Object.assign({},state);
-		temp.user.currentLocation.lat = action.lat;
-		temp.user.currentLocation.long = action.long;
 		return temp;
 	}
 });
