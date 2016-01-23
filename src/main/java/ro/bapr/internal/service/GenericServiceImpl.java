@@ -1,4 +1,4 @@
-package ro.bapr.internal.service.generic;
+package ro.bapr.internal.service;
 
 import java.util.List;
 
@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import ro.bapr.internal.repository.generic.GenericRepository;
 import ro.bapr.internal.model.Result;
+import ro.bapr.internal.service.api.GenericService;
 
 /**
  * @author Spac Valentin - Marian

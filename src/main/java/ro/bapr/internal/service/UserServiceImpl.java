@@ -8,7 +8,7 @@ import ro.bapr.internal.model.Journey;
 import ro.bapr.internal.model.RegisterModel;
 import ro.bapr.internal.repository.api.UserRepository;
 import ro.bapr.internal.repository.generic.GenericRepository;
-import ro.bapr.internal.service.api.ServiceResponse;
+import ro.bapr.internal.service.model.ServiceResponse;
 import ro.bapr.internal.service.api.UserService;
 
 /**

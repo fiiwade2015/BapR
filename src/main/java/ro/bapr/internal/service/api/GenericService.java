@@ -1,4 +1,4 @@
-package ro.bapr.internal.service.generic;
+package ro.bapr.internal.service.api;
 
 import java.util.List;
 

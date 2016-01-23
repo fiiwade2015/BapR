@@ -14,7 +14,7 @@ import ro.bapr.internal.model.Context;
 import ro.bapr.internal.model.ParsedQueryResult;
 import ro.bapr.internal.model.Result;
 import ro.bapr.internal.service.api.EntityService;
-import ro.bapr.internal.service.generic.GenericService;
+import ro.bapr.internal.service.api.GenericService;
 import ro.bapr.internal.utils.ContextCreator;
 import ro.bapr.internal.utils.ServiceUtil;
 import ro.bapr.internal.utils.parser.QueryResultsParser;

@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import ro.bapr.internal.model.Journey;
-import ro.bapr.internal.service.api.ServiceResponse;
+import ro.bapr.internal.service.model.ServiceResponse;
 import ro.bapr.internal.service.api.UserService;
 
 /**

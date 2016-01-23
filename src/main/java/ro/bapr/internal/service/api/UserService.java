@@ -2,6 +2,7 @@ package ro.bapr.internal.service.api;
 
 import ro.bapr.internal.model.Journey;
 import ro.bapr.internal.model.RegisterModel;
+import ro.bapr.internal.service.model.ServiceResponse;
 
 /**
  * @author Spac Valentin - Marian
