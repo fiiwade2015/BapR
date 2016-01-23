@@ -3,6 +3,7 @@ package ro.bapr.internal.utils.parser;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.function.Function;
@@ -35,7 +36,7 @@ public abstract class QueryResultsParser {
     private static final String SPARQL_RESULTS_VARIABLE= "http://www.w3.org/2005/sparql-results#variable";
 
 
-    public static ParsedQueryResult parseBindingSets(List<BindingSet> result) {
+    public static Optional<ParsedQueryResult> parseBindingSets(List<BindingSet> result) {
         ConcurrentMap<String, IRI> variableTypes = new ConcurrentHashMap<>();
         LDResult finalResult = new LDResult();
 
@@ -50,7 +51,7 @@ public abstract class QueryResultsParser {
            parsedResult = new ParsedQueryResult(variableTypes, responseObjects);
         }
 
-        return parsedResult;
+        return Optional.ofNullable(parsedResult);
     }
 
     private static LDObject parseBindingSet(ConcurrentMap<String, IRI> variableTypes, BindingSet set) {

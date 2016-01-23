@@ -50,7 +50,7 @@ public class EntityController {
      * @param resourceId - The id of the resource
      * @return
      */
-    @RequestMapping(value = Endpoint.ENTITIES + "/{id}" + Endpoint.DETAILS, method = RequestMethod.GET)
+    @RequestMapping(value = Endpoint.ENTITY_DETAILS, method = RequestMethod.GET)
     public ResponseEntity<Result> getEntityDetails(@PathVariable("id") String resourceId){
     	Result result = service.getEntityDetails(resourceId);
     			
