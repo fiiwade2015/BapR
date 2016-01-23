@@ -1,9 +1,10 @@
 package ro.bapr.internal.repository.generic;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+
+import org.springframework.stereotype.Service;
 
 import org.openrdf.model.IRI;
 import org.openrdf.model.ValueFactory;
@@ -16,7 +17,6 @@ import org.openrdf.query.QueryResults;
 import org.openrdf.query.TupleQueryResult;
 import org.openrdf.repository.Repository;
 import org.openrdf.repository.RepositoryConnection;
-import org.springframework.stereotype.Service;
 
 import ro.bapr.internal.model.Result;
 import ro.bapr.internal.repository.api.AbstractRepository;
@@ -31,30 +31,28 @@ public class GenericRepositoryImpl extends AbstractRepository implements Generic
     @Override
     public void save(Result result) {
         RepositoryConnection conn = null;
+
         try {
             Repository repo = getRepository();
             ValueFactory valueFactory = repo.getValueFactory();
             conn = repo.getConnection();
             Map<String, Map<String, Object>> ctxItems = result.getContext().getItems();
             final RepositoryConnection finalConn = conn;
-            result.getItems().forEach(entity -> {
-                IRI entityId = valueFactory.createIRI(appNamespace, (String) entity.get("id"));
 
-                entity.forEach((predicate, value) -> {
+            result.getItems().forEach(ldObject -> {
+                IRI entityId = valueFactory.createIRI(appNamespace, ldObject.getId());
+                ldObject.getValues().forEach(kvp -> {
+                    String predicate = kvp.getkey();
+                    List<String> values = kvp.getValues();
+
                     if (!"id".equalsIgnoreCase(predicate)) {
                         IRI predicateIRI = buildPredicate(predicate, valueFactory, result);
-
-                        if (value instanceof Collection) {
-                            for (Object o : ((Collection) value)) {
-                                addStatement(entityId, predicate, (String) o, predicateIRI,
-                                        valueFactory, ctxItems, finalConn);
-                            }
-                        } else {
-                            addStatement(entityId, predicate, (String) value, predicateIRI,
+                        for (String o : values) {
+                            addStatement(entityId, predicate, o, predicateIRI,
                                     valueFactory, ctxItems, finalConn);
                         }
-                    }
 
+                    }
                     //add additional properties
                     result.getContext().getAdditionalProperties()
                             .forEach((property, object) -> finalConn.add(entityId, property, object));

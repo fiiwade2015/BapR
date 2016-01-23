@@ -2,7 +2,7 @@ package ro.bapr.external.dbpedia.service;
 
 import java.util.List;
 
-import org.openrdf.model.Statement;
+import org.openrdf.query.BindingSet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,7 +20,7 @@ public class DBPediaServiceImpl implements DBPediaService {
     private DBPediaRepository repo;
 
     @Override
-    public List<Statement> query(String queryString) {
+    public List<BindingSet> query(String queryString) {
         return repo.query(queryString);
     }
 }

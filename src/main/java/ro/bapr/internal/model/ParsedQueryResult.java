@@ -1,6 +1,6 @@
 package ro.bapr.internal.model;
 
-import java.util.List;
+import java.util.Collection;
 import java.util.Map;
 import java.util.concurrent.ConcurrentMap;
 
@@ -12,9 +12,9 @@ import org.openrdf.model.IRI;
  */
 public class ParsedQueryResult {
     Map<String, IRI> variableTypes;
-    List<Map<String, Object>> resultItems;
+    Collection<LDObject> resultItems;
 
-    public ParsedQueryResult(ConcurrentMap<String, IRI> variableTypes, List<Map<String, Object>> resultItems) {
+    public ParsedQueryResult(ConcurrentMap<String, IRI> variableTypes, Collection<LDObject> resultItems) {
         this.variableTypes = variableTypes;
         this.resultItems = resultItems;
     }
@@ -23,7 +23,7 @@ public class ParsedQueryResult {
         return variableTypes;
     }
 
-    public List<Map<String, Object>> getResultItems() {
+    public Collection<LDObject> getResultItems() {
         return resultItems;
     }
 }

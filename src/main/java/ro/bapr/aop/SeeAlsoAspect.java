@@ -50,12 +50,12 @@ public class SeeAlsoAspect {
                 .forEach(item -> {
                     Objects.requireNonNull(item, "Map with mapped properties (name, id, type, etc) IS NULL, MF. WHY???");
 
-                    List<String> formattedUrls = buildSeeAlsoUrls(item, parameters, seeAlsoUrls);
+                    /*List<String> formattedUrls = buildSeeAlsoUrls(item, parameters, seeAlsoUrls);
                     if (item.get("seeAlso") == null) {
                         item.put("seeAlso", formattedUrls);
                     } else {
                         ((List) item.get("seeAlso")).addAll(formattedUrls);
-                    }
+                    }*/
                 });
     }
 

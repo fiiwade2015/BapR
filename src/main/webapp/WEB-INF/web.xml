@@ -4,23 +4,6 @@
 
 <web-app>
   <display-name>BapR - Backpacker Recommender</display-name>
-
-	 <!-- Spring Security -->
-	<filter>
-		<filter-name>springSecurityFilterChain</filter-name>
-		<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
-	</filter>
-
-	<filter-mapping>
-		<filter-name>springSecurityFilterChain</filter-name>
-		<url-pattern>/*</url-pattern>
-	</filter-mapping>
-    <servlet>
-    	<servlet-name>JAX-RS Servlet</servlet-name>
-    	<description>JAX-RS Tools Generated - Do not modify</description>
-    	<servlet-class></servlet-class>
-    	<load-on-startup>1</load-on-startup>
-    </servlet>
     
   <!-- Processes application requests -->
     <servlet>
@@ -31,8 +14,6 @@
             <param-value>
             	classpath*:/config/servlet-config.xml,
             	classpath*:/config/context-config.xml,
-             <!-- Import spring security configurations -->
-         		classpath*:/config/spring-security.xml
          	 </param-value>
         </init-param>
         <load-on-startup>1</load-on-startup>
@@ -40,10 +21,6 @@
     <servlet-mapping>
         <servlet-name>baprServlet</servlet-name>
         <url-pattern>/*</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-    	<servlet-name>JAX-RS Servlet</servlet-name>
-    	<url-pattern>/jaxrs/*</url-pattern>
     </servlet-mapping>
 <!--
     <error-page>

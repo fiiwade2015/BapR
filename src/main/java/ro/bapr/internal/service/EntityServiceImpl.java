@@ -2,21 +2,21 @@ package ro.bapr.internal.service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Supplier;
 
-import org.openrdf.model.Statement;
 import org.openrdf.query.BindingSet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import ro.bapr.external.dbpedia.repository.api.DBPediaRepository;
 import ro.bapr.external.openmobilenetwork.repository.api.OpenMobileNetworkRepository;
+import ro.bapr.internal.model.Context;
+import ro.bapr.internal.model.ParsedQueryResult;
+import ro.bapr.internal.model.Result;
 import ro.bapr.internal.service.api.EntityService;
 import ro.bapr.internal.service.generic.GenericService;
-import ro.bapr.internal.model.ParsedQueryResult;
-import ro.bapr.internal.utils.parser.QueryResultsParser;
-import ro.bapr.internal.model.Context;
 import ro.bapr.internal.utils.ContextCreator;
-import ro.bapr.internal.model.Result;
+import ro.bapr.internal.utils.parser.QueryResultsParser;
 
 /**
  * Created by valentin.spac on 12/11/2015.
@@ -60,33 +60,7 @@ public class EntityServiceImpl implements EntityService {
                 .replaceAll(":long:", String.valueOf(lng))
                 .replaceAll(":radius:", String.valueOf(radius));
 
-
-        //first query local db
-        boolean saveData = false;
-        ParsedQueryResult parsedResults;
-
-        List<BindingSet> queryResult = genericService.query(queryString);
-        if(queryResult != null && !queryResult.isEmpty()) {
-            parsedResults = QueryResultsParser.parseBindingSets(queryResult);
-        } else {
-            //if no info extracted from local db, query external service
-            saveData = true;
-            List<Statement> queryResults = dbPediaRepository.query(queryString);
-            parsedResults = QueryResultsParser.parseStatements(queryResults);
-
-        }
-
-        Context ctx = contextCreator.create(queryString, parsedResults.getVariableTypes());
-
-        Result result = new Result();
-        result.setItems(parsedResults.getResultItems());
-        result.setContext(ctx);
-
-        if(saveData) {
-            genericService.save(result);
-        }
-
-        return result;
+        return query(queryString, () -> dbPediaRepository.query(queryString));
     }
 
 
@@ -101,32 +75,7 @@ public class EntityServiceImpl implements EntityService {
                 .replaceAll(":long:", String.valueOf(lng))
                 .replaceAll(":radius:", String.valueOf(radius));
 
-        //first query local db
-        boolean saveData = false;
-        ParsedQueryResult parsedResults;
-
-        List<BindingSet> queryResult = genericService.query(queryString);
-        if(queryResult != null && !queryResult.isEmpty()) {
-            parsedResults = QueryResultsParser.parseBindingSets(queryResult);
-        } else {
-            //if no info extracted from local db, query external service
-            saveData = true;
-            List<BindingSet> queryResults = wifiService.query(queryString);
-            parsedResults = QueryResultsParser.parseBindingSets(queryResults);
-
-        }
-
-        Context ctx = contextCreator.create(queryString, parsedResults.getVariableTypes());
-
-        Result result = new Result();
-        result.setItems(parsedResults.getResultItems());
-        result.setContext(ctx);
-
-        if(saveData) {
-            genericService.save(result);
-        }
-
-        return result;
+        return query(queryString, () -> dbPediaRepository.query(queryString));
     }
 
     private double approximateRadiusForRegion() {
@@ -138,21 +87,21 @@ public class EntityServiceImpl implements EntityService {
 	@Override
 	public Result getEntityDetails(String resourceId) {
 		String queryString = GET_ENTITY_DETAILS.replaceAll(":id:", String.valueOf(resourceId));
-		
-		//first query local db
+
+        return query(queryString, () -> dbPediaRepository.query(queryString));
+	}
+
+    private Result query(String queryString,
+                         Supplier<List<BindingSet>> responseSupplier) {
+
+        List<BindingSet> queryResults = genericService.query(queryString);
         boolean saveData = false;
-        ParsedQueryResult parsedResults;
-
-        List<BindingSet> queryResult = genericService.query(queryString);
-        if(queryResult != null && !queryResult.isEmpty()) {
-            parsedResults = QueryResultsParser.parseBindingSets(queryResult);
-        } else {
-            //if no info extracted from local db, query external service
+        if(queryResults == null || queryResults.isEmpty()) {
             saveData = true;
-            List<Statement> queryResults = dbPediaRepository.query(queryString);
-            parsedResults = QueryResultsParser.parseStatements(queryResults);
-
+            queryResults = responseSupplier.get();
         }
+
+        ParsedQueryResult parsedResults = QueryResultsParser.parseBindingSets(queryResults);
 
         Context ctx = contextCreator.create(queryString, parsedResults.getVariableTypes());
 
@@ -165,8 +114,6 @@ public class EntityServiceImpl implements EntityService {
         }
 
         return result;
-	}
-
-
+    }
 
 }

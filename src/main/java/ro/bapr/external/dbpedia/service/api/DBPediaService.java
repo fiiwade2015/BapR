@@ -2,7 +2,7 @@ package ro.bapr.external.dbpedia.service.api;
 
 import java.util.List;
 
-import org.openrdf.model.Statement;
+import org.openrdf.query.BindingSet;
 
 /**
  * @author Spac Valentin - Marian
@@ -10,5 +10,5 @@ import org.openrdf.model.Statement;
  */
 public interface DBPediaService {
 
-    List<Statement> query(String queryString);
+    List<BindingSet> query(String queryString);
 }

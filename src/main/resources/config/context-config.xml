@@ -10,7 +10,6 @@
     classpath*:/properties/app-sesame.properties, classpath*:/properties/app-jdbc.properties,
     classpath*:/properties/entity.query.properties"/>
 
-    <import resource="datasource-config.xml"/>
     <aop:aspectj-autoproxy/>
 
 </beans>

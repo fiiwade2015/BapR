@@ -1,10 +1,15 @@
 package ro.bapr.internal.repository.api;
 
-import org.openrdf.repository.Repository;
-import org.openrdf.repository.manager.LocalRepositoryManager;
-import org.springframework.beans.factory.annotation.Value;
+import java.io.File;
 
-import ro.bapr.internal.repository.GraphRepositoryManager;
+import org.openrdf.repository.Repository;
+import org.openrdf.repository.config.RepositoryConfig;
+import org.openrdf.repository.config.RepositoryImplConfig;
+import org.openrdf.repository.manager.LocalRepositoryManager;
+import org.openrdf.repository.sail.config.SailRepositoryConfig;
+import org.openrdf.sail.config.SailImplConfig;
+import org.openrdf.sail.nativerdf.config.NativeStoreConfig;
+import org.springframework.beans.factory.annotation.Value;
 
 /**
  * @author Spac Valentin - Marian
@@ -24,10 +29,28 @@ public abstract class AbstractRepository {
 
     protected Repository getRepository() {
         if(manager == null) {
-            manager = GraphRepositoryManager.getInstance(repositoryId, baseDir, indexes).getSesameManager();
+            manager = getSesameManager();
+        }
+        Repository repo = manager.getRepository(repositoryId);
+        repo.initialize();
+        return repo;
+    }
+
+    private LocalRepositoryManager getSesameManager() {
+        if(manager == null) {
+            manager = new LocalRepositoryManager(new File(baseDir));
+            // create a configuration for the SAIL stack
+            SailImplConfig backendConfig = new NativeStoreConfig(indexes);
+            // create a configuration for the repository implementation
+            RepositoryImplConfig repositoryTypeSpec = new SailRepositoryConfig(backendConfig);
+
+
+            RepositoryConfig repConfig = new RepositoryConfig(repositoryId, repositoryTypeSpec);
+            manager.initialize();
+            manager.addRepositoryConfig(repConfig);
         }
 
-        return manager.getRepository(repositoryId);
+        return manager;
     }
 
 

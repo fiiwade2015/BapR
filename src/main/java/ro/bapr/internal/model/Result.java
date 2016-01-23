@@ -1,7 +1,6 @@
 package ro.bapr.internal.model;
 
 import java.util.Collection;
-import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -16,7 +15,7 @@ public class Result {
     private Context context;
 
     @JsonProperty("@graph")
-    private Collection<Map<String, Object>> items;
+    private Collection<LDObject> items;
 
     public Context getContext() {
         return context;
@@ -27,11 +26,11 @@ public class Result {
         return this;
     }
 
-    public Collection<Map<String, Object>> getItems() {
+    public Collection<LDObject> getItems() {
         return items;
     }
 
-    public Result setItems(Collection<Map<String, Object>> items) {
+    public Result setItems(Collection<LDObject> items) {
         this.items = items;
         return this;
     }
