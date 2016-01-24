@@ -8,6 +8,7 @@ import { Link }               from 'react-router';
 
 var LocationsApi = require( '../api/locationsApi');
 var ol = require('openlayers');
+var icons = require('../constants/icons');
 
 
 const mapStateToProps = (state) => ({
@@ -32,7 +33,6 @@ export class MapView extends React.Component {
 
   componentDidMount(){
     var that = this;
-
     
     var placeLayer = new ol.layer.Vector({
       source: new ol.source.Vector({
@@ -125,7 +125,7 @@ export class MapView extends React.Component {
 
     userLocationMark.setStyle([new ol.style.Style({
       image: new ol.style.Circle({
-        radius: 24,
+        radius: 10,
         stroke: new ol.style.Stroke({
           color: '#fff'
         }),
@@ -145,6 +145,7 @@ export class MapView extends React.Component {
 
     var map = new ol.Map({
       target: "map",
+      controls: ol.control.defaults(),
       layers: [
         new ol.layer.Tile({
           source: new ol.source.OSM()
@@ -159,6 +160,9 @@ export class MapView extends React.Component {
         zoom: 16
       })
     });
+
+    map.getControls().getArray()[0].element.className="ol-custom-zoom ol-unselectable ol-control";
+    map.setSize([window.innerWidth, window.innerHeight]);
 
     /*
     var that = this;    
@@ -199,22 +203,21 @@ export class MapView extends React.Component {
   }
 
   getStyleForFeature(feature){
+    
+    var iconImg = icons[feature.get('type')] || icons['unknown'];
 
-    var iconURL = "resources/icons/" + feature.get('type') + ".png"
-
-    /*
     var iconStyle = new ol.style.Style({
       image: new ol.style.Icon( ({
         anchor: [0.5, 1],
         anchorXUnits: 'fraction',
         anchorYUnits: 'fraction',
         opacity: 1,
-        scale: 0.2,
-        src: iconURL
+        scale: 0.1,
+        src: iconImg
       }))
     });
-*/
-  
+    
+    /*
     var iconStyle = [new ol.style.Style({
       image: new ol.style.Circle({
         radius: 24,
@@ -232,7 +235,7 @@ export class MapView extends React.Component {
         })
       })
     })];
-
+  */
     return iconStyle;
   }
 
@@ -249,7 +252,6 @@ export class MapView extends React.Component {
         type: locations[index].type 
       });
       iconFeature.setStyle(null);
-      //iconFeature.setStyle(this.getStyleForFeature(iconFeature));
 
       this.vectorSource.addFeature(iconFeature);
     }
@@ -260,6 +262,7 @@ export class MapView extends React.Component {
   render () {
     if(this.mounted){
       this.displayLocations(this.props.map['filteredLocations']);
+      this.map.setSize([window.innerWidth, window.innerHeight]);
     }
 
     return (
