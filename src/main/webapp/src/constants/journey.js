@@ -1,7 +1,8 @@
 import { createConstants } from '../utils';
 export default createConstants(
-	'LOGIN_SUCCESS',
-	'LOGIN_FAILED',
-	'ADD_PLAN',
-	'REMOVE_PLAN',
+	'ADD',
+	'REMOVE', 
+	'UPDATE_STATUS',
+	'ADD_LOCATION',
+	'REMOVE_LOCATION'
 );
