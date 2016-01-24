@@ -8,8 +8,8 @@ import org.openrdf.model.ValueFactory;
 import org.openrdf.model.vocabulary.FOAF;
 import org.openrdf.model.vocabulary.RDF;
 import org.openrdf.model.vocabulary.XMLSchema;
+import org.openrdf.repository.Repository;
 import org.openrdf.repository.RepositoryConnection;
-import org.springframework.stereotype.Repository;
 
 import ro.bapr.internal.model.Journey;
 import ro.bapr.internal.model.RegisterModel;
@@ -22,14 +22,14 @@ import ro.bapr.vocabulary.GEO;
  * @author Spac Valentin - Marian
  * @version 1.0 17.01.2016.
  */
-@Repository
+@org.springframework.stereotype.Repository
 public class UserRepositoryImpl extends AbstractRepository implements UserRepository {
 
     @Override
     public String registerUser(RegisterModel model) {
         RepositoryConnection conn = null;
         try {
-            org.openrdf.repository.Repository repo = getRepository();
+            Repository repo = getRepository();
             ValueFactory valueFactory = repo.getValueFactory();
             conn = repo.getConnection();
 
@@ -58,15 +58,34 @@ public class UserRepositoryImpl extends AbstractRepository implements UserReposi
     }
 
     @Override
-    public String addJourney(Journey journey) {
+    public String addJourney(Journey journey, String userId) {
         RepositoryConnection conn = null;
         try {
-            org.openrdf.repository.Repository repo = getRepository();
+            Repository repo = getRepository();
             ValueFactory valueFactory = repo.getValueFactory();
             conn = repo.getConnection();
 
+            SecureRandom random = new SecureRandom();
+            String randomId = new BigInteger(130, random).toString(32);
 
-            return null;
+            IRI journeyId = valueFactory.createIRI(appNamespace, randomId);
+
+            conn.add(journeyId, RDF.TYPE, BAPR.JOURNEY);
+            conn.add(journeyId, BAPR.JOURNEY_NAME, valueFactory.createLiteral(journey.getName(), "en"));
+            conn.add(journeyId, BAPR.JOURNEY_STATUS, valueFactory.createLiteral(journey.getStatus(), "en"));
+            conn.add(journeyId, BAPR.JOURNEY_CREATION_DATE, valueFactory.createLiteral(journey.getCreationDate()));
+
+            final RepositoryConnection finalConn = conn;
+            journey.getLocationIds()
+                    .forEach(locationId -> finalConn.add(journeyId,
+                            BAPR.JOURNEY_PROPERTY_HAS_LOCATION, valueFactory.createIRI(BAPR.NAMESPACE, locationId)));
+
+
+            IRI ownerIRI = valueFactory.createIRI(appNamespace, userId);
+            conn.add(ownerIRI, BAPR.HAS_JOURNEY, journeyId);
+            conn.add(journeyId, BAPR.HAS_OWNER, ownerIRI);
+
+            return randomId;
         } finally {
             if(conn != null) {
                 conn.commit();

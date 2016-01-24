@@ -25,15 +25,10 @@ public abstract class AbstractRepository {
     @Value("${sesame.app.namespace}")
     protected String appNamespace;
 
-    private LocalRepositoryManager manager;
+    private static LocalRepositoryManager manager;
 
     protected Repository getRepository() {
-        if(manager == null) {
-            manager = getSesameManager();
-        }
-        Repository repo = manager.getRepository(repositoryId);
-        repo.initialize();
-        return repo;
+        return getSesameManager().getRepository(repositoryId);
     }
 
     private LocalRepositoryManager getSesameManager() {

@@ -23,7 +23,7 @@ public class RegisterController {
     private UserService userService;
 
     @RequestMapping(value = Endpoint.REGISTER, method = RequestMethod.POST)
-    public ResponseEntity<String> getEntities(@RequestBody RegisterModel register) {
+    public ResponseEntity<String> registerUser(@RequestBody RegisterModel register) {
         ServiceResponse<String> serviceResponse = userService.registerUser(register);
 
         ResponseEntity<String> requestResponse;

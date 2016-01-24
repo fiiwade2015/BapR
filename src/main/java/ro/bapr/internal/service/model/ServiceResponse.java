@@ -41,7 +41,7 @@ public class ServiceResponse<T> {
     }
 
     public enum Messages {
-        USER_EXISTS("User already exists");
+        USER_EXISTS("User already exists"), USER_NOT_EXISTS("User does not exist");
 
         private String description;
 

@@ -10,5 +10,5 @@ import ro.bapr.internal.model.RegisterModel;
 public interface UserRepository {
 
     String registerUser(RegisterModel model);
-    String addJourney(Journey journey);
+    String addJourney(Journey journey, String userId);
 }

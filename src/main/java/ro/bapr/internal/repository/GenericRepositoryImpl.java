@@ -1,10 +1,12 @@
-package ro.bapr.internal.repository.generic;
+package ro.bapr.internal.repository;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-
-import org.springframework.stereotype.Service;
 
 import org.openrdf.model.IRI;
 import org.openrdf.model.ValueFactory;
@@ -15,11 +17,15 @@ import org.openrdf.query.BindingSet;
 import org.openrdf.query.QueryLanguage;
 import org.openrdf.query.QueryResults;
 import org.openrdf.query.TupleQueryResult;
+import org.openrdf.query.resultio.QueryResultIO;
+import org.openrdf.query.resultio.TupleQueryResultFormat;
 import org.openrdf.repository.Repository;
 import org.openrdf.repository.RepositoryConnection;
+import org.springframework.stereotype.Service;
 
 import ro.bapr.internal.model.Result;
 import ro.bapr.internal.repository.api.AbstractRepository;
+import ro.bapr.internal.repository.api.GenericRepository;
 
 /**
  * @author Spac Valentin - Marian
@@ -109,6 +115,31 @@ public class GenericRepositoryImpl extends AbstractRepository implements Generic
 
         return QueryResults.stream(tt).collect(Collectors.toList());
 
+    }
+
+    @Override
+    public String query(String queryString, TupleQueryResultFormat format) {
+        Repository repo = this.getRepository();
+        RepositoryConnection conn = repo.getConnection();
+
+        TupleQueryResult tt = conn.prepareTupleQuery(QueryLanguage.SPARQL, queryString).evaluate();
+
+        ByteArrayOutputStream output = new ByteArrayOutputStream();
+
+        try {
+            QueryResultIO.writeTuple(tt, format, output);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        String response;
+        try {
+            response = output.toString(StandardCharsets.UTF_8.name());
+        } catch (UnsupportedEncodingException e) {
+            response = new String( output.toByteArray());
+        }
+
+        return response;
     }
 
 

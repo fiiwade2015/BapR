@@ -12,4 +12,5 @@ import ro.bapr.internal.model.Result;
 public interface GenericService {
     void save(Result result);
     List<BindingSet> query(String query);
+    String query(String query, String mimeType);
 }

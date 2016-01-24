@@ -71,32 +71,6 @@ public abstract class QueryResultsParser {
         return ldObject;
     }
 
-
-    private static void buildSolutionResult(List<Statement> solutionBindings,
-                                            Map<String, Statement> variables,
-                                            Map<String, Statement> values,
-                                            ConcurrentMap<String, IRI> variableTypes,
-                                            LDResult ldResult, Statement solution) {
-
-        LDObject ldObject = new LDObject();
-        List<Statement> bindings = getBindingsForSolution(solutionBindings, solution);
-
-        bindings.forEach(binding -> {
-            String bindingKey = binding.getObject().stringValue();
-            Statement variableStmt = variables.get(bindingKey);
-            Statement valueStmt = values.get(bindingKey);
-
-            String bindingName = variableStmt.getObject().stringValue();
-            String stringValue = valueStmt.getObject().stringValue();
-            Value valueStmtObject = valueStmt.getObject();
-
-            KeyValue item = buildLDObject(variableTypes, ldObject, bindingName, stringValue, valueStmtObject);
-            ldObject.addKeyValue(item);
-        });
-
-        ldResult.add(ldObject);
-    }
-
     private static KeyValue buildLDObject(ConcurrentMap<String, IRI> variableTypes,
                                           LDObject ldObject,
                                           String bindingName,
@@ -180,6 +154,32 @@ public abstract class QueryResultsParser {
         return queryResults.stream().parallel()
                 .filter(statement -> filterItem.equalsIgnoreCase(statement.getPredicate().stringValue()))
                 .collect(Collectors.toList());
+    }
+
+    @Deprecated
+    private static void buildSolutionResult(List<Statement> solutionBindings,
+                                            Map<String, Statement> variables,
+                                            Map<String, Statement> values,
+                                            ConcurrentMap<String, IRI> variableTypes,
+                                            LDResult ldResult, Statement solution) {
+
+        LDObject ldObject = new LDObject();
+        List<Statement> bindings = getBindingsForSolution(solutionBindings, solution);
+
+        bindings.forEach(binding -> {
+            String bindingKey = binding.getObject().stringValue();
+            Statement variableStmt = variables.get(bindingKey);
+            Statement valueStmt = values.get(bindingKey);
+
+            String bindingName = variableStmt.getObject().stringValue();
+            String stringValue = valueStmt.getObject().stringValue();
+            Value valueStmtObject = valueStmt.getObject();
+
+            KeyValue item = buildLDObject(variableTypes, ldObject, bindingName, stringValue, valueStmtObject);
+            ldObject.addKeyValue(item);
+        });
+
+        ldResult.add(ldObject);
     }
 
 

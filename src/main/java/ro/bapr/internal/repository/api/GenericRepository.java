@@ -1,8 +1,9 @@
-package ro.bapr.internal.repository.generic;
+package ro.bapr.internal.repository.api;
 
 import java.util.List;
 
 import org.openrdf.query.BindingSet;
+import org.openrdf.query.resultio.TupleQueryResultFormat;
 
 import ro.bapr.internal.model.Result;
 
@@ -13,4 +14,6 @@ public interface GenericRepository {
     void save(Result result);
 
     List<BindingSet> query(String query);
+
+    String query(String queryString, TupleQueryResultFormat format);
 }

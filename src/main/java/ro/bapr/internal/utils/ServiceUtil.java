@@ -6,7 +6,5 @@ package ro.bapr.internal.utils;
  */
 public abstract class ServiceUtil {
 
-    public static String transformDbId(String id, String dbBaseUrl) {
-        return dbBaseUrl + id;
-    }
+
 }
