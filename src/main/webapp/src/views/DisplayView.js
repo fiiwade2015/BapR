@@ -8,6 +8,7 @@ import DisplayTempleateView   from './DisplayTemplateView'
 var UserApi = require( '../api/userApi');
 const mapStateToProps = (state) => ({
   user : state.user,
+  map : state.map,
   counter : state.counter
 });
 
@@ -28,7 +29,7 @@ export class DisplayView extends React.Component {
   render () {
     let locationName = null;
     if(this.props.menu.displayView.displayLocationId){
-      this.props.user.locations.map(item => {
+      this.props.map.locations.map(item => {
         if(item.id === this.props.menu.displayView.displayLocationId){
           locationName = item.name;
         }

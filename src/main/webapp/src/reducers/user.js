@@ -2,16 +2,17 @@ import { createReducer } 	from '../utils';
 import { LOGIN_SUCCESS } 	from 'constants/user';
 import { LOGIN_FAILED }	 	from 'constants/user';
 import { ADD_PLAN }	 	 	from 'constants/user';
-import { ADD_LOCATION }	 	from 'constants/user';
 import { REMOVE_LOCATION }	from 'constants/user';
 import {START_JOURNEY}		from 'constants/user';
+import { USER_LOCATION }		from 'constants/user';
+
 const initialState = {
 	user: {
 		id : null,
 		name : '',
-		journeys : [1,2],
+		journeys : [],
 		currentJourneyId : null,
-		currentUserLocation: {
+		currentLocation: {
 			lat : null,
 			long: null
 		},
@@ -43,7 +44,7 @@ export default createReducer(initialState, {
 	},
 	[ADD_PLAN]	: (state, action) => {
 		let temp = Object.assign({},state);
-		temp.user.plans.push(action);
+		temp.user.journeys.push(action);
 		return temp;
 	},
 	[START_JOURNEY]: (state,action) => {
@@ -55,15 +56,7 @@ export default createReducer(initialState, {
 		});
 		return temp;
 	},
-	[ADD_LOCATION] : (state, action) => {
-		let temp =  Object.assign({},state);
-		for(let i = 0; i < temp.user.plans.length; i++) {
-			if(temp.user.plans[i].id === action.planId) {
-				temp.user.plans[i].locations.push(action.location);
-			}
-		}
-		return temp;
-	},
+	
 	[REMOVE_LOCATION] : (state,action) => {
 		let temp =  Object.assign({},state);
 		for(let i = 0; i < temp.plans.length; i++) {
@@ -76,6 +69,12 @@ export default createReducer(initialState, {
 				}
 			}
 		}
+		return temp;
+	},
+	[USER_LOCATION] : (state, action) => {
+		let temp =  Object.assign({},state);
+		temp.user.currentLocation.lat = action.lat;
+		temp.user.currentLocation.long = action.long;
 		return temp;
 	}
 });

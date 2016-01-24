@@ -2,6 +2,7 @@ import { LOGIN_SUCCESS } 	from 'constants/user';
 import { LOGIN_FAILED}	 	from 'constants/user';
 import { ADD_PLAN }	 	 	from 'constants/user';
 import { REMOVE_PLAN }		from 'constants/user';
+import { USER_LOCATION } 		from 'constants/user';
 
 export default {
 	loginSuccess: (user) => {
@@ -27,6 +28,15 @@ export default {
 			type: REMOVE_PLAN,
 			payload: {
 				planId: planId,
+			}
+		}
+	},
+	saveUserLocation : (lat, long) => {
+		return {
+			type: USER_LOCATION,
+			payload: {
+				lat,
+				long
 			}
 		}
 	}

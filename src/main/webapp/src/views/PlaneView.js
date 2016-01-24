@@ -3,6 +3,7 @@ import { bindActionCreators } from 'redux';
 import { connect }            from 'react-redux';
 import counterActions         from 'actions/counter';
 import userAction             from 'actions/user';
+import journeyAction          from 'actions/journey';
 import { Link }               from 'react-router';
 import ListPlansView          from './ListPlansView';
 import ListLocationView       from './ListLocationView';
@@ -10,12 +11,14 @@ import ListLocationView       from './ListLocationView';
 var UserApi = require( '../api/userApi');
 const mapStateToProps = (state) => ({
   user : state.user,
+  menu : state.menu,
+  journeys : state.journeys,
   counter : state.counter
 });
 
 const mapDispatchToProps = (dispatch) => {
   return bindActionCreators(
-    Object.assign({}, counterActions),
+    Object.assign({}, userAction,counterActions,journeyAction),
     dispatch);
 }
 
@@ -29,7 +32,7 @@ export class PlaneView extends React.Component {
 
   render () {
     let disableStatus = false; 
-    if(this.props.user.editPlans.status !== "stop"){
+    if(this.props.menu.planView.statusView !== "viewPlans"){
       disableStatus = true;
     }
     return (
@@ -42,17 +45,18 @@ export class PlaneView extends React.Component {
           </div>
           <button disabled={disableStatus} className='btn btn-default btn-block' onClick={() => {
             this.currentPlanId += 1;
-            this.props.addPlan({
+            let currentDate = Date();
+            this.props.addJourney({
               id: this.currentPlanId,
               name: this.planElement.value,
               locations: [],
-              status: 'await'
+              status: this.props.journeys.journeyStatus.BUILDING,
+              createdAt : currentDate
             });
+            this.props.addPlan(this.currentPlanId);
           }}>New Plan</button>
         <div>
-          {this.props.user.editPlans.status === "stop"? <ListPlansView {...this.props}/> : null}
-          {this.props.user.editPlans.status === "editing"? <ListLocationView {...this.props}/>: null}
-          
+          {this.props.menu.planView.statusView === "viewPlans"? <ListPlansView {...this.props}/> : <ListLocationView {...this.props}/>}
         </div>
       </div>
     );
@@ -61,7 +65,7 @@ export class PlaneView extends React.Component {
   constructor (props, context) {
     super(props, context);
     console.log(this);
-    this.currentPlanId = 2;
+    this.currentPlanId = 0;
   }
 }
 

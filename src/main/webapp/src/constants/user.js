@@ -4,9 +4,8 @@ export default createConstants(
 	'LOGIN_FAILED',
 	'ADD_PLAN',
 	'EDIT_PLAN',
-	'ADD_LOCATION',
 	'REMOVE_LOCATION',
 	'START_JOURNEY',
-	'USER_LOCATION'
+	'USER_LOCATION',
 	'REMOVE_PLAN',
 );

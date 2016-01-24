@@ -3,17 +3,19 @@ import { bindActionCreators } from 'redux';
 import { connect }            from 'react-redux';
 import counterActions         from 'actions/counter';
 import userAction             from 'actions/user';
+import journeyAction          from 'actions/journey';
 import { Link }               from 'react-router';
 
 var UserApi = require( '../api/userApi');
 const mapStateToProps = (state) => ({
   user : state.user,
-  counter : state.counter
+  counter : state.counter,
+  journeys : state.journeys
 });
 
 const mapDispatchToProps = (dispatch) => {
   return bindActionCreators(
-    Object.assign({}, counterActions),
+    Object.assign({}, journeyAction, counterActions, userAction),
     dispatch);
 }
 
@@ -27,26 +29,27 @@ export class ListPlansView extends React.Component {
 
   render () {
     let planList = [];
-    for(let i = 0; i < this.props.user.user.plans.length; i++) {
+    for(let i = 0; i < this.props.journeys.journeys.length; i++) {
       // take care of the className;
       let className = "list-group-item ";
       let text = "View";
-      if(this.props.user.user.plans[i].status === "await") {
+      console.log(this.props);
+      if(this.props.journeys.journeys[i].status === this.props.journeys.journeyStatus.BUILDING) {
         className += "list-group-item-info";
         text = "Edit";
       }
-      if(this.props.user.user.plans[i].status === "finished") {
+      if(this.props.journeys.journeys[i].status === this.props.journeys.journeyStatus.END) {
         className += "list-group-item-success";
       }
-      if(this.props.user.user.plans[i].status === "inProgress") {
+      if(this.props.journeys.journeys[i].status === this.props.journeys.journeyStatus.ONGOING) {
         className += "list-group-item-warning";
       }
       //add element to list;
       planList.push(
-        <li className={className} key={this.props.user.user.plans[i].id}>
+        <li className={className} key={i}>
           <span className="badge" onClick={()=> {
-            this.props.editPlan(this.props.user.user.plans[i].id,'editing');
-          }}>{text}</span>{this.props.user.user.plans[i].name}
+            this.props.updatePlanView(this.props.journeys.journeys[i].id,'viewPlan');
+          }}>{text}</span>{this.props.journeys.journeys[i].name}
         </li>
       );
     }

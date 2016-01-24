@@ -28,7 +28,7 @@ export default createReducer(initialState, {
 				index = i;
 			}
 		});
-		temp.journeys = temp.journeys.slice(0,index).concat(temp.journeys.slice(index+1);
+		temp.journeys = temp.journeys.slice(0,index).concat(temp.journeys.slice(index+1));
   		return temp;
   	},
   	[UPDATE_STATUS] : (state, action) => {
@@ -60,7 +60,7 @@ export default createReducer(initialState, {
 						index = i;
 					}
 				});
-				temp.journeys[j].locations = temp.journeys[j].locations.slice(0,index).concat(temp.journeys[j].locations.slice(index+1);
+				temp.journeys[j].locations = temp.journeys[j].locations.slice(0,index).concat(temp.journeys[j].locations.slice(index+1));
 			}
 		});
 	  	return tempObj

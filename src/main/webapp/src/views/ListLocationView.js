@@ -3,11 +3,15 @@ import { bindActionCreators } from 'redux';
 import { connect }            from 'react-redux';
 import counterActions         from 'actions/counter';
 import userAction             from 'actions/user';
+import journeyAction          from 'actions/journey';
 import { Link }               from 'react-router';
+
 var UserApi = require( '../api/userApi');
 const mapStateToProps = (state) => ({
   user : state.user,
-  counter : state.counter
+  journeys : state.journeys,
+  counter : state.counter,
+  map : state.map
 });
 
 const mapDispatchToProps = (dispatch) => {
@@ -29,22 +33,24 @@ export class ListLocationView extends React.Component {
     let locationList = [];
     let className = "list-group-item ";
     let text = "View";
-    let canEdidPlan = true;
+    let canEdidPlan;
     let canEditLocation = false;
-    this.props.user.user.plans.map(item => {
-      if(item.id === this.props.user.editPlans.planId) {
-        if(item.status === "await") {
+    this.props.journeys.journeys.map(item => {
+      if(item.id === this.props.menu.planView.planId) {
+        if(item.status === this.props.journeys.journeyStatus.BUILDING) {
           className += "list-group-item-info";
           text = "Edit";
           canEdidPlan = false;
         }
-        if(item.status === "finished") {
+        if(item.status === this.props.journeys.journeyStatus.END) {
           className += "list-group-item-success";
         }
-        if(item.status === "inProgress") {
+        if(item.status === this.props.journeys.journeyStatus.ONGOING) {
           className += "list-group-item-warning";
           canEditLocation = true;
         }
+        canEdidPlan = item.locations.length === 0? true : false;
+        console.log(item.locations.length);
         //to display the current plan we are working on
         planList.push(
           <li className={className} key={item.id}>
@@ -53,7 +59,14 @@ export class ListLocationView extends React.Component {
         );
 
         // to display the list of location
-        item.locations.map(location => {
+        item.locations.map(idLocation => {
+          let location;
+          console.log(this.props);
+          this.props.map.locations.map(loc => {
+              if(loc.id === idLocation){
+                location = loc;
+              }
+          });
           locationList.push(
             <li className={className} key={location.id}>
               <span className="badge" onClick={() => {
@@ -74,29 +87,17 @@ export class ListLocationView extends React.Component {
           {planList}
         </ul>
         <div>
-          <div className="form-group">
-            <label className="sr-only" htmlFor="addLocation">Lication Name: </label>
-            <input disabled={canEdidPlan} id="addLocation" placeholder="Lication Name" className="form-control" type="text" ref= {location => { this.locationElement = location}} required/>
-          </div>
-          <button disabled={canEdidPlan} className='btn btn-default btn-block' onClick={() => {
-            this.currentLocationId += 1;
-            this.props.addLocation(
-              this.props.user.editPlans.planId,{
-              id: this.currentLocationId,
-              name: this.locationElement.value,
-              geoData: {lat : 44, long : 556}
-            });
-          }}>Add New Location</button>
+          <p>Add Locations to Journey! (from map)</p>
           <h3>Traveling location</h3>
           <ul className="list-group">
             {locationList}
           </ul>
           <button className='btn btn-default btn-block' onClick={() => {
-            this.props.editPlan(null,'stop');
+            this.props.updatePlanView(null,'viewPlans');
             }}>Back to plan list!</button>
 
           <button disabled={canEdidPlan} className='btn btn-success btn-block' onClick={() => {
-            this.props.satrtJourney(this.props.user.editPlans.planId);
+            this.props.updateStatus(this.props.menu.planView.planId, this.props.journeys.journeyStatus.ONGOING);
             }}>Start journey!</button>
         </div>
       </div>
@@ -105,7 +106,7 @@ export class ListLocationView extends React.Component {
 
   constructor (props, context) {
     super(props, context);
-    this.currentLocationId = 1;
+    this.currentLocationId = 0;
   }
 }
 
