@@ -1,4 +1,4 @@
-package ro.bapr.external.openmobilenetwork.repository;
+package ro.bapr.external.dbpedia.repository;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -12,21 +12,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import ro.bapr.external.api.factory.ConnectionFactory;
-import ro.bapr.external.openmobilenetwork.repository.api.OpenMobileNetworkRepository;
+import ro.bapr.external.dbpedia.repository.api.DBPediaRepository;
 
 /**
  * @author Spac Valentin - Marian
  * @version 1.0 17.11.2015.
  */
 @Repository
-public class OpenMobileNetworkRepositoryImpl implements OpenMobileNetworkRepository {
+public class DBpediaRepositoryImpl implements DBPediaRepository {
 
     @Autowired
     private ConnectionFactory connectionFactory;
 
     @Override
     public List<BindingSet> query(String queryString) {
-        RepositoryConnection conn = connectionFactory.getConnectionFor("omn");
+        RepositoryConnection conn = connectionFactory.getConnectionFor("dbpedia");
         TupleQueryResult result = conn.prepareTupleQuery(QueryLanguage.SPARQL, queryString).evaluate();
 
         return QueryResults.stream(result).collect(Collectors.toList());

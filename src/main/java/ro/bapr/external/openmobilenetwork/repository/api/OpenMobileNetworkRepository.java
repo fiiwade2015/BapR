@@ -1,12 +1,13 @@
 package ro.bapr.external.openmobilenetwork.repository.api;
 
-import java.util.Collection;
-import java.util.Map;
+import java.util.List;
+
+import org.openrdf.query.BindingSet;
 
 /**
  * @author Spac Valentin - Marian
  * @version 1.0 17.11.2015.
  */
 public interface OpenMobileNetworkRepository {
-    Collection<Map<String, Object>> query(String queryString);
+    List<BindingSet> query(String queryString);
 }

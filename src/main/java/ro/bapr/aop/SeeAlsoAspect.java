@@ -6,18 +6,18 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Component;
 
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Component;
 
-import ro.bapr.response.Result;
+import ro.bapr.internal.model.Result;
 
 /**
  * @author Spac Valentin - Marian
@@ -45,17 +45,25 @@ public class SeeAlsoAspect {
         List<String> seeAlsoUrls = Arrays.asList(seeAlso.value());
 
         Map<String, String> parameters = getSeeAlsoParameter(seeAlsoUrls);
+        result.getItems()
+                .stream()
+                .forEach(item -> {
+                    Objects.requireNonNull(item, "Map with mapped properties (name, id, type, etc) IS NULL, MF. WHY???");
 
-        result.getItems().forEach(item -> {
-            List<String> formattedUrls = buildSeeAlsoUrls(item, parameters, seeAlsoUrls);
-            item.put("seeAlso", formattedUrls);
-        });
+                    /*List<String> formattedUrls = buildSeeAlsoUrls(item, parameters, seeAlsoUrls);
+                    if (item.get("seeAlso") == null) {
+                        item.put("seeAlso", formattedUrls);
+                    } else {
+                        ((List) item.get("seeAlso")).addAll(formattedUrls);
+                    }*/
+                });
     }
 
     private List<String> buildSeeAlsoUrls(Map<String, Object> item,
-                                          Map<String, String> parameters, List<String> seeAlsoUrls) {
+                                          Map<String, String> parameters,
+                                          List<String> seeAlsoUrls) {
         List<String> resultUrls = new ArrayList<>();
-        seeAlsoUrls.forEach(url ->
+        seeAlsoUrls.stream().forEach(url ->
                 parameters.forEach((key, value) ->
                         resultUrls.add(url.replaceAll(Pattern.quote(key), item.get(value).toString()))));
 
@@ -78,9 +86,9 @@ public class SeeAlsoAspect {
         Map<String, String> params = new HashMap<>();
         Pattern pattern = Pattern.compile("/\\{\\w+\\}/");
 
-        seeAlsoUrls.forEach( url -> {
+        seeAlsoUrls.stream().forEach(url -> {
             Matcher matcher = pattern.matcher(url);
-            while(matcher.find()) {
+            while (matcher.find()) {
                 String param = matcher.group();
                 params.put(param.substring(1, param.length() - 1),
                         param.substring(2, param.length() - 2));

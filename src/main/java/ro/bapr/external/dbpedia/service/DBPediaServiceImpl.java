@@ -1,4 +1,4 @@
-package ro.bapr.external.openmobilenetwork.service;
+package ro.bapr.external.dbpedia.service;
 
 import java.util.List;
 
@@ -6,18 +6,18 @@ import org.openrdf.query.BindingSet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import ro.bapr.external.openmobilenetwork.repository.api.OpenMobileNetworkRepository;
-import ro.bapr.external.openmobilenetwork.service.api.OpenMobileNetworkService;
+import ro.bapr.external.dbpedia.repository.api.DBPediaRepository;
+import ro.bapr.external.dbpedia.service.api.DBPediaService;
 
 /**
  * @author Spac Valentin - Marian
  * @version 1.0 17.11.2015.
  */
 @Service
-public class OpenMobileNetworkServiceImpl implements OpenMobileNetworkService {
+public class DBPediaServiceImpl implements DBPediaService {
 
     @Autowired
-    private OpenMobileNetworkRepository repo;
+    private DBPediaRepository repo;
 
     @Override
     public List<BindingSet> query(String queryString) {
