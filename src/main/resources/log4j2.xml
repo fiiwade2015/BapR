@@ -2,7 +2,7 @@
 <Configuration>
     <Appenders>
         <RollingFile name="RollingFile" fileName="${sys:catalina.home}/logs/bapr/bapr.log"
-                     filePattern="${log-path}/bapr-%d{yyyy-MM-dd}-%i.log">
+                     filePattern="${sys:catalina.home}/logs/bapr/bapr-%d{yyyy-MM-dd}-%i.log">
             <PatternLayout>
                 <pattern>%d{dd/MMM/yyyy HH:mm:ss.SSS} %-5level : %m%n</pattern>
             </PatternLayout>
