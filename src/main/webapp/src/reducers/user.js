@@ -2,70 +2,23 @@ import { createReducer } 	from '../utils';
 import { LOGIN_SUCCESS } 	from 'constants/user';
 import { LOGIN_FAILED }	 	from 'constants/user';
 import { ADD_PLAN }	 	 	from 'constants/user';
-import { EDIT_PLAN}			from 'constants/user';
 import { ADD_LOCATION }	 	from 'constants/user';
 import { REMOVE_LOCATION }	from 'constants/user';
 import {START_JOURNEY}		from 'constants/user';
-import {USER_LOCATION}		from 'constants/user';
 const initialState = {
 	user: {
 		id : null,
-		userAuth :'guest',
 		name : '',
-		loginStatus : false,
-		currentLocation: {
-			lat: 0,
-			long: 0
+		journeys : [1,2],
+		currentJourneyId : null,
+		currentUserLocation: {
+			lat : null,
+			long: null
 		},
-		plans : [
-			{
-				id : 1,
-				name : 'Journey',
-				locations : [
-					{
-						id: 1,
-						name: 'Tokyo University',
-						geoData : {
-							lat: 43.45,
-							long: 25.33,
-						},
-						visited: false
-					}
-				],
-				status : 'inProgress'
-			},{
-				id : 2,
-				name : 'One Ok Rock',
-				locations :[
-					{
-						id: 1,
-						name: 'Tokyo',
-						geoData: {
-							lat: 45.32,
-							long: 23.44
-						},
-						visited: true
-					},
-					{
-						id: 2,
-						name: 'Osaka',
-						geoData: {
-							lat: 34.33,
-							long: 33.33
-						},
-						visited: true
-					}
-				],
-				status : 'finished'
-			}
-		]
+		currentBuildingJourneyId : null,
+		health: {}
 	},
-	errorMessage: '',
-	editPlans: {
-		planId : null,
-		status : 'stop'
-	},
-	locations: [{id: 1, name:'Tokyo'},{id: 2, name: 'Osaka'}]
+	errorMessage: ''
 };
 
 export default createReducer(initialState, {
@@ -93,12 +46,6 @@ export default createReducer(initialState, {
 		temp.user.plans.push(action);
 		return temp;
 	},
-	[EDIT_PLAN] : (state, action) => {
-		let temp = Object.assign({},state);
-		temp.editPlans.planId = action.planId;
-		temp.editPlans.status = action.status;
-		return temp;
-	},
 	[START_JOURNEY]: (state,action) => {
 		let temp = Object.assign({},state);
 		temp.user.plans.map(plan => {
@@ -124,17 +71,11 @@ export default createReducer(initialState, {
 				for(let j = 0; j < temp.plans[i].locations.length; j++) {
 					if(temp.plans[i].locations[j].id === action.locationId){
 						temp.plans[i].locations = temp.plans[i].locations.splice(j,1);
-						break;	
+						break;
 					}
 				}
 			}
 		}
-		return temp;
-	},
-	[USER_LOCATION] : (state, action) => {
-		let temp =  Object.assign({},state);
-		temp.user.currentLocation.lat = action.lat;
-		temp.user.currentLocation.long = action.long;
 		return temp;
 	}
 });

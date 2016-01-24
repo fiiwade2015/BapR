@@ -8,4 +8,5 @@ export default createConstants(
 	'REMOVE_LOCATION',
 	'START_JOURNEY',
 	'USER_LOCATION'
+	'REMOVE_PLAN',
 );
