@@ -1,5 +1,9 @@
 package ro.bapr.controller;
 
+import java.io.IOException;
+
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,12 +26,14 @@ public class SPARQLController {
     private GenericService genericService;
 
     @RequestMapping(value = Endpoint.SPARQL, method = RequestMethod.GET)
-    public ResponseEntity<String> queryTripleStore(@RequestParam("q") String query,
+    public ResponseEntity<JsonNode> queryTripleStore(@RequestParam("q") String query,
                                                    @RequestHeader(value = "Content-Type",
-                                                           required = false) String mimeType) {
+                                                           required = false) String mimeType) throws IOException {
         String result = genericService.query(query, mimeType);
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode actualObj = mapper.readTree(result);
 
-        return new ResponseEntity<>(result, HttpStatus.OK);
+        return new ResponseEntity<>(actualObj, HttpStatus.OK);
     }
 
 }
