@@ -2,16 +2,12 @@ package ro.bapr.internal.utils.parser;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 import org.openrdf.model.IRI;
 import org.openrdf.model.Literal;
-import org.openrdf.model.Statement;
 import org.openrdf.model.Value;
 import org.openrdf.model.vocabulary.XMLSchema;
 import org.openrdf.query.BindingSet;
@@ -26,15 +22,6 @@ import ro.bapr.internal.model.ParsedQueryResult;
  * @version 1.0 15.01.2016.
  */
 public abstract class QueryResultsParser {
-    @Deprecated
-    private static final String SPARQL_RESULTS_SOLUTION = "http://www.w3.org/2005/sparql-results#solution";
-    @Deprecated
-    private static final String SPARQL_RESULTS_BINDING = "http://www.w3.org/2005/sparql-results#binding";
-    @Deprecated
-    private static final String SPARQL_RESULTS_VALUE = "http://www.w3.org/2005/sparql-results#value";
-    @Deprecated
-    private static final String SPARQL_RESULTS_VARIABLE= "http://www.w3.org/2005/sparql-results#variable";
-
 
     public static Optional<ParsedQueryResult> parseBindingSets(List<BindingSet> result) {
         ConcurrentMap<String, IRI> variableTypes = new ConcurrentHashMap<>();
@@ -91,18 +78,10 @@ public abstract class QueryResultsParser {
 
     }
 
-    private static List<Statement> getBindingsForSolution(List<Statement> solutionBindings, Statement solution) {
-        return solutionBindings.stream()
-                //.parallel()
-                .filter(binding ->
-                        binding.getSubject().stringValue().equalsIgnoreCase(solution.getObject().stringValue()))
-                .collect(Collectors.toList());
-    }
-
     /**
      * Updates the variable types (string,float etc) needed for context and local storage
      */
-    private static void updateVariableTypes(ConcurrentMap<String, IRI> variableTypes,
+    public static void updateVariableTypes(ConcurrentMap<String, IRI> variableTypes,
                                      String variableName,
                                      Value value) {
         if(value instanceof Literal) {
@@ -117,70 +96,5 @@ public abstract class QueryResultsParser {
                     + value.getClass().getSuperclass().getCanonicalName());
         }
     }
-
-    @Deprecated
-    public static ParsedQueryResult parseStatements(List<Statement> queryResults) {
-        List<Statement> querySolutions = filterCollectionBy(queryResults, SPARQL_RESULTS_SOLUTION);
-        List<Statement> solutionBindings =  filterCollectionBy(queryResults, SPARQL_RESULTS_BINDING);
-        Map<String, Statement> variables = getFilteredMapBy(queryResults, SPARQL_RESULTS_VARIABLE);
-        Map<String, Statement> values = getFilteredMapBy(queryResults, SPARQL_RESULTS_VALUE);
-
-        return buildParsedResults(querySolutions, solutionBindings, variables, values);
-    }
-
-    @Deprecated
-    private static ParsedQueryResult buildParsedResults(List<Statement> querySolutions, List<Statement> solutionBindings,
-                                                        Map<String, Statement> variables, Map<String, Statement> values) {
-        ConcurrentMap<String, IRI> variableTypes = new ConcurrentHashMap<>();
-        LDResult finalResult = new LDResult();
-
-        querySolutions.stream()
-                .parallel()
-                .forEach(solution -> buildSolutionResult(solutionBindings, variables, values, variableTypes, finalResult, solution));
-
-        Collection<LDObject> results = finalResult.getMergedResults();
-        return new ParsedQueryResult(variableTypes, results);
-    }
-
-    @Deprecated
-    private static Map<String, Statement> getFilteredMapBy(List<Statement> queryResults, String filterItem) {
-        return queryResults.stream().parallel()
-                .filter(statement -> filterItem.equalsIgnoreCase(statement.getPredicate().stringValue()))
-                .collect(Collectors.toMap(s -> s.getSubject().stringValue(), Function.identity()));
-    }
-
-    @Deprecated
-    private static List<Statement> filterCollectionBy(List<Statement> queryResults, String filterItem) {
-        return queryResults.stream().parallel()
-                .filter(statement -> filterItem.equalsIgnoreCase(statement.getPredicate().stringValue()))
-                .collect(Collectors.toList());
-    }
-
-    @Deprecated
-    private static void buildSolutionResult(List<Statement> solutionBindings,
-                                            Map<String, Statement> variables,
-                                            Map<String, Statement> values,
-                                            ConcurrentMap<String, IRI> variableTypes,
-                                            LDResult ldResult, Statement solution) {
-
-        LDObject ldObject = new LDObject();
-        List<Statement> bindings = getBindingsForSolution(solutionBindings, solution);
-
-        bindings.forEach(binding -> {
-            String bindingKey = binding.getObject().stringValue();
-            Statement variableStmt = variables.get(bindingKey);
-            Statement valueStmt = values.get(bindingKey);
-
-            String bindingName = variableStmt.getObject().stringValue();
-            String stringValue = valueStmt.getObject().stringValue();
-            Value valueStmtObject = valueStmt.getObject();
-
-            KeyValue item = buildLDObject(variableTypes, ldObject, bindingName, stringValue, valueStmtObject);
-            ldObject.addKeyValue(item);
-        });
-
-        ldResult.add(ldObject);
-    }
-
 
 }

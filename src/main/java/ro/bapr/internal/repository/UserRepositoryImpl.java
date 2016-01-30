@@ -78,7 +78,7 @@ public class UserRepositoryImpl extends AbstractRepository implements UserReposi
             final RepositoryConnection finalConn = conn;
             journey.getLocationIds()
                     .forEach(locationId -> finalConn.add(journeyId,
-                            BAPR.JOURNEY_PROPERTY_HAS_LOCATION, valueFactory.createIRI(BAPR.NAMESPACE, locationId)));
+                            BAPR.JOURNEY_PROPERTY_HAS_LOCATION, valueFactory.createIRI(appNamespace, locationId)));
 
 
             IRI ownerIRI = valueFactory.createIRI(appNamespace, userId);
