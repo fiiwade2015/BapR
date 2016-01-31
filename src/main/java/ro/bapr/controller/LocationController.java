@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import ro.bapr.internal.model.Journey;
-import ro.bapr.internal.model.Result;
+import ro.bapr.internal.model.response.journey.JourneyResult;
 import ro.bapr.internal.service.api.UserService;
 import ro.bapr.internal.service.model.ServiceResponse;
 
@@ -41,7 +41,7 @@ public class LocationController {
 
     @RequestMapping(value = Endpoint.USER_LOCATION, method = RequestMethod.GET)
     public ResponseEntity getUserJourneys(@RequestHeader("X-User") String userId) {
-        ServiceResponse<Result> serviceResponse = userService.getJourneys(userId);
+        ServiceResponse<JourneyResult> serviceResponse = userService.getJourneys(userId);
 
         ResponseEntity requestResponse;
         if(serviceResponse.getStatus().equals(ServiceResponse.Status.SUCCESS)) {

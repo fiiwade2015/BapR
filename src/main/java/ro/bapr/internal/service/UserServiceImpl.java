@@ -1,18 +1,31 @@
 package ro.bapr.internal.service;
 
-import java.util.Collections;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
+import java.util.stream.Collectors;
 
+import org.openrdf.model.IRI;
+import org.openrdf.query.BindingSet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import ro.bapr.internal.model.Journey;
+import ro.bapr.internal.model.response.journey.JourneyResult;
+import ro.bapr.internal.model.KeyValue;
+import ro.bapr.internal.model.LDObject;
 import ro.bapr.internal.model.RegisterModel;
-import ro.bapr.internal.model.Result;
+import ro.bapr.internal.model.response.journey.JourneyData;
 import ro.bapr.internal.repository.api.UserRepository;
 import ro.bapr.internal.service.api.GenericService;
 import ro.bapr.internal.service.api.UserService;
 import ro.bapr.internal.service.model.ServiceResponse;
+import ro.bapr.internal.utils.ContextCreator;
+import ro.bapr.internal.utils.parser.QueryResultsParser;
 
 /**
  * @author Spac Valentin - Marian
@@ -77,17 +90,137 @@ public class UserServiceImpl extends AbstractService implements UserService {
         return !service.query(checkIfUSerExists).isEmpty();
     }
 
+    /**
+     * Don't modify this. Don't try to understand what this function does.
+     * It works, leave it as is. If something breaks, verify query params (locationId, id, creationDate, etc)
+     * Increment hour counter spent here : 5
+     */
     @Override
-    public ServiceResponse<Result> getJourneys(String userId) {
+    public ServiceResponse<JourneyResult> getJourneys(String userId) {
         String finalUserId = transformDbId(userId, appNamespace);
         String getUserJourneysQuery = getUsersJourney.replaceAll(":id:", finalUserId);
 
-        Result result = query(getUserJourneysQuery, Collections::emptyList);
+        ConcurrentMap<String, IRI> variableTypes = new ConcurrentHashMap<>();
 
-        ServiceResponse<Result> serviceResponse = new ServiceResponse<>();
+        List<LDObject> journeyLocation = new ArrayList<>();
+        List<LDObject> journeyData = new ArrayList<>();
+
+        List<BindingSet> bindingSets = service.query(getUserJourneysQuery);
+
+        bindingSets.stream().forEach(bindings -> splitJourneyLocation(variableTypes, journeyLocation,
+                journeyData, bindings));
+
+
+        //add this to the other journey stuff
+        List<LDObject> journeyLocations = mergeLocations(journeyLocation);
+        List<LDObject> journeys = mergeJourneys(journeyData);
+
+        List<JourneyData> finalR = new ArrayList<>();
+        journeys.stream().parallel()
+                .forEach(journey -> mapJourneyLocation(journeyLocations, finalR, journey));
+
+        ContextCreator creator = new ContextCreator();
+        JourneyResult journeyResult = new JourneyResult();
+        journeyResult.setContext(creator.create(getUserJourneysQuery, variableTypes));
+        journeyResult.setItems(finalR);
+
+        ServiceResponse<JourneyResult> serviceResponse = new ServiceResponse<>();
         serviceResponse.setStatus(ServiceResponse.Status.SUCCESS);
-        serviceResponse.setResult(result);
+        serviceResponse.setResult(journeyResult);
 
         return serviceResponse;
     }
+
+    private void mapJourneyLocation(List<LDObject> journeyLocations, List<JourneyData> finalR, LDObject journey) {
+        JourneyData s = new JourneyData();
+        s.setJourneyData(journey);
+        List<LDObject> filteredLocations = journeyLocations.stream()
+                .parallel()
+                .filter(loc -> {
+                    try {
+                        return journey.getMap().get("locationId").getValues()
+                                .contains(loc.getMap().get("locationId").getSingleValue());
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        return false;
+                    }
+                }).collect(Collectors.toList());
+
+        s.setLocations(filteredLocations);
+        s.removeMappingProperty("locationId");
+        finalR.add(s);
+    }
+
+    private void splitJourneyLocation(ConcurrentMap<String, IRI> variableTypes, List<LDObject> journeyLocation,
+                                      List<LDObject> journeyDatas, BindingSet bindings) {
+        LDObject locationsData = new LDObject();
+        LDObject journeyData = new LDObject();
+
+        bindings.getBindingNames().stream().forEach(bindingName -> {
+            org.openrdf.model.Value value = bindings.getBinding(bindingName).getValue();
+            QueryResultsParser.updateVariableTypes(variableTypes, bindingName, value);
+
+            if (Arrays.asList("id", "creationDate", "name", "status").contains(bindingName)) {
+                journeyData.addKeyValue(new KeyValue(bindingName, value.stringValue()));
+            } else {
+                locationsData.addKeyValue(new KeyValue(bindingName, value.stringValue()));
+            }
+
+            if ("locationId".equalsIgnoreCase(bindingName)) {
+                journeyData.addKeyValue(new KeyValue(bindingName, value.stringValue()));
+            }
+        });
+
+        journeyLocation.add(locationsData);
+        journeyDatas.add(journeyData);
+    }
+
+    private  List<LDObject> mergeJourneys(List<LDObject> journeyDatas) {
+        Map<String, List<LDObject>> r = journeyDatas.stream()
+                .parallel()
+                .collect(Collectors.groupingBy(LDObject::getId));
+
+        List<LDObject> result = new ArrayList<>();
+
+        final LDObject[] finalObj = {null};
+        r.forEach((k,v) -> {
+            v.stream().forEach(ldObject -> {
+                if (finalObj[0] == null) {
+                    finalObj[0] = ldObject;
+                } else {
+                    finalObj[0].merge(ldObject);
+                }
+            });
+            result.add(finalObj[0]);
+            finalObj[0] = null;
+        });
+
+        return result;
+    }
+
+    private List<LDObject> mergeLocations(List<LDObject> ldObjects) {
+        Map<String, List<LDObject>> r = ldObjects.stream()
+                .parallel()
+                .collect(Collectors.groupingBy(ldObject -> {
+                    return ldObject.getMap().get("locationId").getValues().get(0);
+                }));
+
+        List<LDObject> finalLocationForJourney = new ArrayList<>();
+
+        final LDObject[] finalObj = {null};
+        r.forEach((k,v) -> {
+            v.stream().forEach(ldObject -> {
+                if (finalObj[0] == null) {
+                    finalObj[0] = ldObject;
+                } else {
+                    finalObj[0].merge(ldObject);
+                }
+            });
+            finalLocationForJourney.add(finalObj[0]);
+            finalObj[0] = null;
+        });
+
+        return finalLocationForJourney;
+    }
+
 }

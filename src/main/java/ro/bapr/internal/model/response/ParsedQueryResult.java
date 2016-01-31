@@ -1,10 +1,12 @@
-package ro.bapr.internal.model;
+package ro.bapr.internal.model.response;
 
 import java.util.Collection;
 import java.util.Map;
 import java.util.concurrent.ConcurrentMap;
 
 import org.openrdf.model.IRI;
+
+import ro.bapr.internal.model.LDObject;
 
 /**
  * @author Spac Valentin - Marian
