@@ -41,7 +41,8 @@ public class ServiceResponse<T> {
     }
 
     public enum Messages {
-        USER_EXISTS("User already exists"), USER_NOT_EXISTS("User does not exist");
+        USER_EXISTS("User already exists"), USER_NOT_EXISTS("User does not exist"),
+        COULD_NOT_UPDATE_USER_LOCATION("Could not update user location");
 
         private String description;
 

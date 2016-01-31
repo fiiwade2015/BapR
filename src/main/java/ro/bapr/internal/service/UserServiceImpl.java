@@ -14,11 +14,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import ro.bapr.internal.model.Journey;
+import ro.bapr.internal.model.request.Journey;
+import ro.bapr.internal.model.request.UserLocation;
 import ro.bapr.internal.model.response.journey.JourneyResult;
 import ro.bapr.internal.model.KeyValue;
 import ro.bapr.internal.model.LDObject;
-import ro.bapr.internal.model.RegisterModel;
+import ro.bapr.internal.model.request.RegisterModel;
 import ro.bapr.internal.model.response.journey.JourneyData;
 import ro.bapr.internal.repository.api.UserRepository;
 import ro.bapr.internal.service.api.GenericService;
@@ -80,14 +81,20 @@ public class UserServiceImpl extends AbstractService implements UserService {
         return response;
     }
 
-    private boolean userExists(RegisterModel model) {
-        String checkIfUSerExists = getUserByName.replace(":name:", model.getUsername());
-        return !service.query(checkIfUSerExists).isEmpty();
-    }
+    @Override
+    public ServiceResponse<UserLocation> updateUserLocation(String userId, UserLocation location) {
+        location = userRepo.updateUserLocation(location, userId);
 
-    private boolean userExists(String userId) {
-        String checkIfUSerExists = getUserById.replace(":id:", transformDbId(userId, appNamespace));
-        return !service.query(checkIfUSerExists).isEmpty();
+        ServiceResponse<UserLocation> serviceResponse = new ServiceResponse<>();
+        if(location != null) {
+            serviceResponse.setStatus(ServiceResponse.Status.SUCCESS);
+            serviceResponse.setResult(location);
+        } else {
+            serviceResponse.setStatus(ServiceResponse.Status.FAIL);
+            serviceResponse.setMessage(ServiceResponse.Messages.COULD_NOT_UPDATE_USER_LOCATION);
+        }
+
+        return serviceResponse;
     }
 
     /**
@@ -183,7 +190,7 @@ public class UserServiceImpl extends AbstractService implements UserService {
         List<LDObject> result = new ArrayList<>();
 
         final LDObject[] finalObj = {null};
-        r.forEach((k,v) -> {
+        r.forEach((k, v) -> {
             v.stream().forEach(ldObject -> {
                 if (finalObj[0] == null) {
                     finalObj[0] = ldObject;
@@ -208,7 +215,7 @@ public class UserServiceImpl extends AbstractService implements UserService {
         List<LDObject> finalLocationForJourney = new ArrayList<>();
 
         final LDObject[] finalObj = {null};
-        r.forEach((k,v) -> {
+        r.forEach((k, v) -> {
             v.stream().forEach(ldObject -> {
                 if (finalObj[0] == null) {
                     finalObj[0] = ldObject;
@@ -221,6 +228,16 @@ public class UserServiceImpl extends AbstractService implements UserService {
         });
 
         return finalLocationForJourney;
+    }
+
+    private boolean userExists(RegisterModel model) {
+        String checkIfUSerExists = getUserByName.replace(":name:", model.getUsername());
+        return !service.query(checkIfUSerExists).isEmpty();
+    }
+
+    private boolean userExists(String userId) {
+        String checkIfUSerExists = getUserById.replace(":id:", transformDbId(userId, appNamespace));
+        return !service.query(checkIfUSerExists).isEmpty();
     }
 
 }

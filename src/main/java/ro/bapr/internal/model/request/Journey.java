@@ -1,4 +1,4 @@
-package ro.bapr.internal.model;
+package ro.bapr.internal.model.request;
 
 import java.util.Date;
 import java.util.List;

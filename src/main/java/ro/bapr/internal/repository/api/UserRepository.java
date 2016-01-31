@@ -1,7 +1,8 @@
 package ro.bapr.internal.repository.api;
 
-import ro.bapr.internal.model.Journey;
-import ro.bapr.internal.model.RegisterModel;
+import ro.bapr.internal.model.request.Journey;
+import ro.bapr.internal.model.request.RegisterModel;
+import ro.bapr.internal.model.request.UserLocation;
 
 /**
  * @author Spac Valentin - Marian
@@ -11,4 +12,5 @@ public interface UserRepository {
 
     String registerUser(RegisterModel model);
     String addJourney(Journey journey, String userId);
+    UserLocation updateUserLocation(UserLocation userLocation, String userId);
 }

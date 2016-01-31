@@ -5,14 +5,18 @@ import java.security.SecureRandom;
 
 import org.openrdf.model.IRI;
 import org.openrdf.model.ValueFactory;
+import org.openrdf.model.impl.SimpleValueFactory;
 import org.openrdf.model.vocabulary.FOAF;
 import org.openrdf.model.vocabulary.RDF;
 import org.openrdf.model.vocabulary.XMLSchema;
+import org.openrdf.query.QueryLanguage;
 import org.openrdf.repository.Repository;
 import org.openrdf.repository.RepositoryConnection;
+import org.springframework.beans.factory.annotation.Value;
 
-import ro.bapr.internal.model.Journey;
-import ro.bapr.internal.model.RegisterModel;
+import ro.bapr.internal.model.request.Journey;
+import ro.bapr.internal.model.request.RegisterModel;
+import ro.bapr.internal.model.request.UserLocation;
 import ro.bapr.internal.repository.api.AbstractRepository;
 import ro.bapr.internal.repository.api.UserRepository;
 import ro.bapr.vocabulary.BAPR;
@@ -24,6 +28,8 @@ import ro.bapr.vocabulary.GEO;
  */
 @org.springframework.stereotype.Repository
 public class UserRepositoryImpl extends AbstractRepository implements UserRepository {
+    @Value("${user.update.current.location}")
+    protected String updateUL;
 
     @Override
     public String registerUser(RegisterModel model) {
@@ -92,5 +98,26 @@ public class UserRepositoryImpl extends AbstractRepository implements UserReposi
                 conn.close();
             }
         }
+    }
+
+
+    @Override
+    public UserLocation updateUserLocation(UserLocation userLocation, String userId) {
+        Repository repo = this.getRepository();
+        RepositoryConnection conn = repo.getConnection();
+        SimpleValueFactory factory = SimpleValueFactory.getInstance();
+
+        String latitude = factory.createLiteral(String.valueOf(userLocation.getLatitude()), XMLSchema.FLOAT).toString();
+        String longitude = factory.createLiteral(String.valueOf(userLocation.getLongitude()), XMLSchema.FLOAT).toString();
+        userId = factory.createIRI(appNamespace, userId).toString();
+
+        updateUL = updateUL.replaceAll(":id:", userId)
+                .replaceAll(":lat:", latitude)
+                .replaceAll(":long:", longitude);
+
+        conn.prepareUpdate(QueryLanguage.SPARQL, updateUL).execute();
+        conn.commit();
+
+        return userLocation;
     }
 }
