@@ -45,6 +45,7 @@ export class PlaneView extends React.Component {
           </div>
           <button disabled={disableStatus} className='btn btn-default btn-block' onClick={() => {
             this.currentPlanId += 1;
+            this.currentPlanId += 1;
             let currentDate = Date();
             this.props.addJourney({
               id: this.currentPlanId,

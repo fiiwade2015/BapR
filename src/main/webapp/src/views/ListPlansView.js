@@ -46,7 +46,7 @@ export class ListPlansView extends React.Component {
       }
       //add element to list;
       planList.push(
-        <li className={className} key={i}>
+        <li className={className} key={this.props.journeys.journeys[i].id}>
           <span className="badge" onClick={()=> {
             this.props.updatePlanView(this.props.journeys.journeys[i].id,'viewPlan');
           }}>{text}</span>{this.props.journeys.journeys[i].name}

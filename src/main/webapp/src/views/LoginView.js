@@ -22,11 +22,13 @@ export class LoginView extends React.Component {
 	    loginFailed : React.PropTypes.func,
 	    user: React.PropTypes.object
 	}
+	
 
 	componentDidMount(){
 
 		if (navigator.geolocation) {
 		    navigator.geolocation.getCurrentPosition((position) => {
+		    	console.log(this);
 		    	this.props.saveUserLocation(position.coords.latitude, position.coords.longitude);
 		    });
 		} else {

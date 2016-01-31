@@ -9,6 +9,7 @@ import { Link }               from 'react-router';
 var LocationsApi = require( '../api/locationsApi');
 var ol = require('openlayers');
 var icons = require('../constants/icons');
+var UserApi = require( '../api/userApi');
 
 
 const mapStateToProps = (state) => ({
@@ -30,7 +31,9 @@ export class MapView extends React.Component {
     selectLocation: React.PropTypes.func,
     filter: React.PropTypes.func
   }
-
+  static contextTypes = {
+    store : React.PropTypes.object
+  }
   componentDidMount(){
     var that = this;
     
@@ -195,7 +198,15 @@ export class MapView extends React.Component {
     map.on("moveend", function(){
       var extent = map.getView().calculateExtent(map.getSize());
       extent = ol.proj.transformExtent(extent, 'EPSG:3857', 'EPSG:4326');
-      that.props.move(LocationsApi.getLocationAround(extent[0], extent[1], extent[2], extent[3]));
+      //that.props.move(LocationsApi.getLocationAround(extent[0], extent[1], extent[2], extent[3]));
+      
+      var center = ol.proj.transform(that.map.getView().getCenter(), 'EPSG:3857', 'EPSG:4326');
+      var raza = Math.min( (center[0] - extent[0]), (center[1] - extent[1]));
+      
+      console.log(userCurrentLocation);
+      let bulshit = UserApi.fetchTest(that.props.user.user.currentLocation.lat, that.props.user.user.currentLocation.long,2.5);
+      that.context.store.dispatch(bulshit);
+
     });
 
     this.mounted = true;
@@ -245,7 +256,7 @@ export class MapView extends React.Component {
     this.vectorSource.clear();
     
     for(var index = 0; index < locations.length; index++){
-      var coords = [locations[index].lat, locations[index].long];
+      var coords = [locations[index].long, locations[index].lat];
       var iconFeature = new ol.Feature({
         geometry: new ol.geom.Point(ol.proj.transform(coords, 'EPSG:4326', 'EPSG:3857')),
         id: locations[index].id,

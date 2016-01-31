@@ -1,4 +1,4 @@
-import { UPDATE_MENU, UPDATE_PLAN_VIEW } from 'constants/menu';
+import { UPDATE_MENU, UPDATE_PLAN_VIEW,UPDATE_DISPLAY_VIEW } from 'constants/menu';
 
 export default {
   changeMenu: (menuItem, locationId) => {
@@ -15,5 +15,11 @@ export default {
   		type : UPDATE_PLAN_VIEW,
   		payload: {planId: planId, status: viewStatus}
   	}
+  },
+  updateDisplayView: (locationId, data) => {
+    return {
+      type: UPDATE_DISPLAY_VIEW,
+      payload: {locationId : locationId, displayedData: data}
+    }
   }
 };

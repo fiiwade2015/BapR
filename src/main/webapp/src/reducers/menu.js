@@ -1,5 +1,5 @@
 import { createReducer }     from '../utils';
-import { UPDATE_MENU, UPDATE_PLAN_VIEW } from 'constants/menu';
+import { UPDATE_MENU, UPDATE_PLAN_VIEW,UPDATE_DISPLAY_VIEW } from 'constants/menu';
 
 const initialState = {
 	displayView : {
@@ -7,7 +7,8 @@ const initialState = {
 		visible : false,
 		iconName : 'display',
 		className : 'fa fa-book fa-3x',
-		displayLocationId : null
+		displayLocationId : null,
+		displayedData: null
 	},
 	healthView : {
 		id : 2,
@@ -46,6 +47,16 @@ export default createReducer(initialState, {
   			tempObj[item].visible = false;
   		}
   	}
+  	return tempObj
+  },
+  [UPDATE_DISPLAY_VIEW] : (state, action) => {
+  	let tempObj  = Object.assign({},state);
+  	for(let item in tempObj) {
+  		tempObj[item].visible = false;
+  	}
+  	tempObj.displayView.visible = true;
+  	tempObj.displayView.displayLocationId = action.locationId;
+  	tempObj.displayView.displayedData = action.displayedData;
   	return tempObj
   },
   [UPDATE_PLAN_VIEW] : (state, action) => {

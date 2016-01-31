@@ -9,6 +9,7 @@ var UserApi = require( '../api/userApi');
 const mapStateToProps = (state) => ({
   user : state.user,
   map : state.map,
+  menu: state.menu,
   counter : state.counter
 });
 
@@ -41,7 +42,7 @@ export class DisplayView extends React.Component {
         {locationName? <h3>{locationName}</h3> : <p>Please select a location first!</p>}
         <br/>
         <hr/>
-        {locationName? <DisplayTempleateView {...this.props} /> : null}
+        {this.props.menu.displayView.displayedData? <DisplayTempleateView {...this.props} /> : null}
       </div>
     );
   }

@@ -30,16 +30,26 @@ let isLocationVisible = function(filter, locationType){
 
 let filterLocations = function(filter, locations){
 	
-	if(filter === "all"){
+	/*if(filter === "all"){
 		return locations;
-	}
+	}*/
 
 	var result = [];
+	console.log(locations.length);
 	for(var i=0;i<locations.length;i++){
 		var locationType = locations[i]['type'];
-		if(isLocationVisible(filter, locationType)){
+		//if(isLocationVisible(filter, locationType)){
+			if(Array.isArray(locations[i].lat)){
+				locations[i].lat  = locations[i].lat[0];
+			}
+			if(Array.isArray(locations[i].long)){
+				locations[i].long  = locations[i].long[0];
+			}
+			let aux = 
+			locations[i].long = parseFloat(locations[i].long);
+			locations[i].lat = parseFloat(locations[i].lat);
 			result.push(locations[i]);
-		}
+		//}
 	}
 
 	return result;
