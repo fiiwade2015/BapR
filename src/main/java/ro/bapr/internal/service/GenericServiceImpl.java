@@ -7,7 +7,7 @@ import org.openrdf.query.resultio.TupleQueryResultFormat;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import ro.bapr.internal.model.Result;
+import ro.bapr.internal.model.response.Result;
 import ro.bapr.internal.repository.api.GenericRepository;
 import ro.bapr.internal.service.api.GenericService;
 

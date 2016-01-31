@@ -15,10 +15,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import ro.bapr.internal.model.Journey;
+import ro.bapr.internal.model.response.journey.JourneyResult;
 import ro.bapr.internal.model.KeyValue;
 import ro.bapr.internal.model.LDObject;
 import ro.bapr.internal.model.RegisterModel;
-import ro.bapr.internal.model.Result;
+import ro.bapr.internal.model.response.journey.JourneyData;
 import ro.bapr.internal.repository.api.UserRepository;
 import ro.bapr.internal.service.api.GenericService;
 import ro.bapr.internal.service.api.UserService;
@@ -89,63 +90,69 @@ public class UserServiceImpl extends AbstractService implements UserService {
         return !service.query(checkIfUSerExists).isEmpty();
     }
 
+    /**
+     * Don't modify this. Don't try to understand what this function does.
+     * It works, leave it as is. If something breaks, verify query params (locationId, id, creationDate, etc)
+     * Increment hour counter spent here : 5
+     */
     @Override
-    public ServiceResponse<Result> getJourneys(String userId) {
+    public ServiceResponse<JourneyResult> getJourneys(String userId) {
         String finalUserId = transformDbId(userId, appNamespace);
         String getUserJourneysQuery = getUsersJourney.replaceAll(":id:", finalUserId);
 
         ConcurrentMap<String, IRI> variableTypes = new ConcurrentHashMap<>();
 
         List<LDObject> journeyLocation = new ArrayList<>();
-        List<LDObject> journeyDatas = new ArrayList<>();
+        List<LDObject> journeyData = new ArrayList<>();
 
         List<BindingSet> bindingSets = service.query(getUserJourneysQuery);
 
         bindingSets.stream().forEach(bindings -> splitJourneyLocation(variableTypes, journeyLocation,
-                journeyDatas, bindings));
+                journeyData, bindings));
 
 
         //add this to the other journey stuff
         List<LDObject> journeyLocations = mergeLocations(journeyLocation);
-        List<LDObject> journeys = mergeJourneys(journeyDatas);
+        List<LDObject> journeys = mergeJourneys(journeyData);
 
-        List<Test> finalR = new ArrayList<>();
+        List<JourneyData> finalR = new ArrayList<>();
         journeys.stream().parallel()
                 .forEach(journey -> mapJourneyLocation(journeyLocations, finalR, journey));
 
         ContextCreator creator = new ContextCreator();
-        creator.create(getUserJourneysQuery, variableTypes);
+        JourneyResult journeyResult = new JourneyResult();
+        journeyResult.setContext(creator.create(getUserJourneysQuery, variableTypes));
+        journeyResult.setItems(finalR);
 
-        //TODO all that is left is to transform test class into ceva ce poti returna
-
-
-        ServiceResponse<Result> serviceResponse = new ServiceResponse<>();
+        ServiceResponse<JourneyResult> serviceResponse = new ServiceResponse<>();
         serviceResponse.setStatus(ServiceResponse.Status.SUCCESS);
-        serviceResponse.setResult(null);
+        serviceResponse.setResult(journeyResult);
 
         return serviceResponse;
     }
 
-    private void mapJourneyLocation(List<LDObject> journeyLocations, List<Test> finalR, LDObject journey) {
-        Test s = new Test();
-        s.setJurneyData(journey);
-        List<LDObject> gggg = journeyLocations.stream()
+    private void mapJourneyLocation(List<LDObject> journeyLocations, List<JourneyData> finalR, LDObject journey) {
+        JourneyData s = new JourneyData();
+        s.setJourneyData(journey);
+        List<LDObject> filteredLocations = journeyLocations.stream()
                 .parallel()
                 .filter(loc -> {
                     try {
-                        return journey.getMap().get("location").getValues()
-                                .contains(loc.getMap().get("location").getSingleValue());
+                        return journey.getMap().get("locationId").getValues()
+                                .contains(loc.getMap().get("locationId").getSingleValue());
                     } catch (Exception e) {
                         e.printStackTrace();
                         return false;
                     }
                 }).collect(Collectors.toList());
 
-        s.setLocations(gggg);
+        s.setLocations(filteredLocations);
+        s.removeMappingProperty("locationId");
         finalR.add(s);
     }
 
-    private void splitJourneyLocation(ConcurrentMap<String, IRI> variableTypes, List<LDObject> journeyLocation, List<LDObject> journeyDatas, BindingSet bindings) {
+    private void splitJourneyLocation(ConcurrentMap<String, IRI> variableTypes, List<LDObject> journeyLocation,
+                                      List<LDObject> journeyDatas, BindingSet bindings) {
         LDObject locationsData = new LDObject();
         LDObject journeyData = new LDObject();
 
@@ -159,7 +166,7 @@ public class UserServiceImpl extends AbstractService implements UserService {
                 locationsData.addKeyValue(new KeyValue(bindingName, value.stringValue()));
             }
 
-            if ("location".equalsIgnoreCase(bindingName)) {
+            if ("locationId".equalsIgnoreCase(bindingName)) {
                 journeyData.addKeyValue(new KeyValue(bindingName, value.stringValue()));
             }
         });
@@ -195,7 +202,7 @@ public class UserServiceImpl extends AbstractService implements UserService {
         Map<String, List<LDObject>> r = ldObjects.stream()
                 .parallel()
                 .collect(Collectors.groupingBy(ldObject -> {
-                    return ldObject.getMap().get("location").getValues().get(0);
+                    return ldObject.getMap().get("locationId").getValues().get(0);
                 }));
 
         List<LDObject> finalLocationForJourney = new ArrayList<>();
@@ -216,27 +223,4 @@ public class UserServiceImpl extends AbstractService implements UserService {
         return finalLocationForJourney;
     }
 
-
-    private class Test {
-        List<LDObject> locations;
-        LDObject jurneyData;
-
-        public List<LDObject> getLocations() {
-            return locations;
-        }
-
-        public Test setLocations(List<LDObject> locations) {
-            this.locations = locations;
-            return this;
-        }
-
-        public LDObject getJurneyData() {
-            return jurneyData;
-        }
-
-        public Test setJurneyData(LDObject jurneyData) {
-            this.jurneyData = jurneyData;
-            return this;
-        }
-    }
 }

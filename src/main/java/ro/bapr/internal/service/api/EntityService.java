@@ -2,7 +2,7 @@ package ro.bapr.internal.service.api;
 
 import java.util.Optional;
 
-import ro.bapr.internal.model.Result;
+import ro.bapr.internal.model.response.Result;
 
 /**
  * @author Spac Valentin - Marian

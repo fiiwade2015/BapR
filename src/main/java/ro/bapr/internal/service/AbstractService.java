@@ -8,9 +8,9 @@ import org.openrdf.query.BindingSet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
-import ro.bapr.internal.model.Context;
-import ro.bapr.internal.model.ParsedQueryResult;
-import ro.bapr.internal.model.Result;
+import ro.bapr.internal.model.response.Context;
+import ro.bapr.internal.model.response.ParsedQueryResult;
+import ro.bapr.internal.model.response.Result;
 import ro.bapr.internal.service.api.GenericService;
 import ro.bapr.internal.utils.ContextCreator;
 import ro.bapr.internal.utils.parser.QueryResultsParser;

@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.openrdf.query.BindingSet;
 
-import ro.bapr.internal.model.Result;
+import ro.bapr.internal.model.response.Result;
 
 /**
  * Created by valentin.spac on 12/14/2015.

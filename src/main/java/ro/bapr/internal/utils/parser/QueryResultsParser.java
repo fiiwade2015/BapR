@@ -15,7 +15,7 @@ import org.openrdf.query.BindingSet;
 import ro.bapr.internal.model.KeyValue;
 import ro.bapr.internal.model.LDObject;
 import ro.bapr.internal.model.LDResult;
-import ro.bapr.internal.model.ParsedQueryResult;
+import ro.bapr.internal.model.response.ParsedQueryResult;
 
 /**
  * @author Spac Valentin - Marian

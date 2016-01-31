@@ -17,7 +17,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
-import ro.bapr.internal.model.Result;
+import ro.bapr.internal.model.response.Result;
 
 /**
  * @author Spac Valentin - Marian

@@ -1,9 +1,11 @@
-package ro.bapr.internal.model;
+package ro.bapr.internal.model.response;
 
 import java.util.Collection;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+
+import ro.bapr.internal.model.LDObject;
 
 /**
  * @author Spac Valentin - Marian
