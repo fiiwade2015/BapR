@@ -99,8 +99,24 @@ public class UserServiceImpl extends AbstractService implements UserService {
     }
 
     @Override
-    public ServiceResponse<JourneyUpdate> updateUserJourney(String userId, JourneyUpdate journeyUpdate) {
-        journeyUpdate = userRepo.updateUserJourney(journeyUpdate, userId);
+    public ServiceResponse<JourneyUpdate> updateUserJourney(String userId, JourneyUpdate journeyUpdate, String journeyId) {
+        journeyUpdate = userRepo.updateUserJourney(journeyUpdate, userId, journeyId);
+
+        ServiceResponse<JourneyUpdate> serviceResponse = new ServiceResponse<>();
+        if(journeyUpdate != null) {
+            serviceResponse.setStatus(ServiceResponse.Status.SUCCESS);
+            serviceResponse.setResult(journeyUpdate);
+        } else {
+            serviceResponse.setStatus(ServiceResponse.Status.FAIL);
+            serviceResponse.setMessage(ServiceResponse.Messages.COULD_NOT_UPDATE_USER_LOCATION);
+        }
+
+        return serviceResponse;
+    }
+
+    @Override
+    public ServiceResponse<JourneyUpdate> updateJourneyStatus(String userId, JourneyUpdate journeyUpdate) {
+        journeyUpdate = userRepo.updateJourneyStatus(journeyUpdate, userId);
 
         ServiceResponse<JourneyUpdate> serviceResponse = new ServiceResponse<>();
         if(journeyUpdate != null) {

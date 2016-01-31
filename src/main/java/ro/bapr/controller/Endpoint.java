@@ -13,4 +13,5 @@ class Endpoint {
     public static final String SPARQL = "/sparql";
     public static final String USER = "/user";
     public static final String USER_JOURNEYS = USER + "/journeys";
+    public static final String USER_JOURNEY_LOCATIONS = USER_JOURNEYS + "/{id}/locations";
 }

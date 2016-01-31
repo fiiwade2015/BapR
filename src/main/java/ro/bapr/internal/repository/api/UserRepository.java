@@ -15,5 +15,7 @@ public interface UserRepository {
     String addJourney(Journey journey, String userId);
     UserLocation updateUserLocation(UserLocation userLocation, String userId);
 
-    JourneyUpdate updateUserJourney(JourneyUpdate journeyUpdate, String userId);
+    JourneyUpdate updateUserJourney(JourneyUpdate journeyUpdate, String userId, String journeyId);
+
+    JourneyUpdate updateJourneyStatus(JourneyUpdate journeyUpdate, String userId);
 }

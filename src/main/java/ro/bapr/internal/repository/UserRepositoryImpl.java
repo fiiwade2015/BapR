@@ -35,6 +35,9 @@ public class UserRepositoryImpl extends AbstractRepository implements UserReposi
     @Value("${user.update.journey.location}")
     protected String updateJourneyLocation;
 
+    @Value("${user.update.journey.status}")
+    protected String updateJourneyStatus;
+
     @Override
     public String registerUser(RegisterModel model) {
         RepositoryConnection conn = null;
@@ -126,35 +129,56 @@ public class UserRepositoryImpl extends AbstractRepository implements UserReposi
         String longitude = factory.createLiteral(String.valueOf(userLocation.getLongitude()), XMLSchema.FLOAT).toString();
         userId = factory.createIRI(appNamespace, userId).toString();
 
-        updateUL = updateUL.replaceAll(":id:", userId)
+        String updateQuery = updateUL.replaceAll(":id:", userId)
                 .replaceAll(":lat:", latitude)
                 .replaceAll(":long:", longitude);
 
-        conn.prepareUpdate(QueryLanguage.SPARQL, updateUL).execute();
+        conn.prepareUpdate(QueryLanguage.SPARQL, updateQuery).execute();
         conn.commit();
 
         return userLocation;
     }
 
     @Override
-    public JourneyUpdate updateUserJourney(JourneyUpdate journeyUpdate, String userId) {
+    public JourneyUpdate updateUserJourney(JourneyUpdate journeyUpdate, String userId, String journeyId) {
 
         Repository repo = this.getRepository();
         RepositoryConnection conn = repo.getConnection();
         SimpleValueFactory factory = SimpleValueFactory.getInstance();
 
-        String journeyId = factory.createIRI(appNamespace, String.valueOf(journeyUpdate.getJourneyId())).toString();
-        String entityId = factory.createIRI(appNamespace, String.valueOf(journeyUpdate.getEntityId())).toString();
         String status = factory.createLiteral(String.valueOf(journeyUpdate.getStatus()), XMLSchema.STRING).toString();
+        String entityId = factory.createIRI(appNamespace, String.valueOf(journeyUpdate.getEntityId())).toString();
+        journeyId = factory.createIRI(appNamespace, journeyId).toString();
         userId = factory.createIRI(appNamespace, userId).toString();
 
-        updateJourneyLocation = updateJourneyLocation
+        String parsedQuery = updateJourneyLocation
                 .replaceAll(":id:", userId)
                 .replaceAll(":journeyId:", journeyId)
                 .replaceAll(":entityId:", entityId)
                 .replaceAll(":status:", status);
 
-        conn.prepareUpdate(QueryLanguage.SPARQL, updateJourneyLocation).execute();
+        conn.prepareUpdate(QueryLanguage.SPARQL, parsedQuery).execute();
+        conn.commit();
+
+        return journeyUpdate;
+    }
+
+    @Override
+    public JourneyUpdate updateJourneyStatus(JourneyUpdate journeyUpdate, String userId) {
+        Repository repo = this.getRepository();
+        RepositoryConnection conn = repo.getConnection();
+        SimpleValueFactory factory = SimpleValueFactory.getInstance();
+
+        String status = factory.createLiteral(String.valueOf(journeyUpdate.getStatus()), XMLSchema.STRING).toString();
+        String journeyId = factory.createIRI(appNamespace, String.valueOf(journeyUpdate.getEntityId())).toString();
+        userId = factory.createIRI(appNamespace, userId).toString();
+
+        String parsedQuery = updateJourneyStatus
+                .replaceAll(":id:", userId)
+                .replaceAll(":journeyId:", journeyId)
+                .replaceAll(":status:", status);
+
+        conn.prepareUpdate(QueryLanguage.SPARQL, parsedQuery).execute();
         conn.commit();
 
         return journeyUpdate;

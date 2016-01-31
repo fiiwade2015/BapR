@@ -18,5 +18,7 @@ public interface UserService {
 
     ServiceResponse<UserLocation> updateUserLocation(String userId, UserLocation location);
 
-    ServiceResponse<JourneyUpdate> updateUserJourney(String userId, JourneyUpdate journeyUpdate);
+    ServiceResponse<JourneyUpdate> updateUserJourney(String userId, JourneyUpdate journeyUpdate, String journeyId);
+
+    ServiceResponse<JourneyUpdate> updateJourneyStatus(String userId, JourneyUpdate journeyUpdate);
 }
