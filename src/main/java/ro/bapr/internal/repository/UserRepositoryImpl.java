@@ -15,6 +15,7 @@ import org.openrdf.repository.RepositoryConnection;
 import org.springframework.beans.factory.annotation.Value;
 
 import ro.bapr.internal.model.request.Journey;
+import ro.bapr.internal.model.request.JourneyUpdate;
 import ro.bapr.internal.model.request.RegisterModel;
 import ro.bapr.internal.model.request.UserLocation;
 import ro.bapr.internal.repository.api.AbstractRepository;
@@ -30,6 +31,9 @@ import ro.bapr.vocabulary.GEO;
 public class UserRepositoryImpl extends AbstractRepository implements UserRepository {
     @Value("${user.update.current.location}")
     protected String updateUL;
+
+    @Value("${user.update.journey.location}")
+    protected String updateJourneyLocation;
 
     @Override
     public String registerUser(RegisterModel model) {
@@ -71,7 +75,7 @@ public class UserRepositoryImpl extends AbstractRepository implements UserReposi
             ValueFactory valueFactory = repo.getValueFactory();
             conn = repo.getConnection();
 
-            SecureRandom random = new SecureRandom();
+            final SecureRandom random = new SecureRandom();
             String randomId = new BigInteger(130, random).toString(32);
 
             IRI journeyId = valueFactory.createIRI(appNamespace, randomId);
@@ -83,8 +87,20 @@ public class UserRepositoryImpl extends AbstractRepository implements UserReposi
 
             final RepositoryConnection finalConn = conn;
             journey.getLocationIds()
-                    .forEach(locationId -> finalConn.add(journeyId,
-                            BAPR.JOURNEY_PROPERTY_HAS_LOCATION, valueFactory.createIRI(appNamespace, locationId)));
+                    .forEach(locationId -> {
+                        String randomString = new BigInteger(130, random).toString(32);
+                        IRI journeyLocationId = valueFactory.createIRI(appNamespace, randomString);
+
+                        finalConn.add(journeyLocationId, RDF.TYPE, BAPR.JOURNEY_LOCATION);
+                        finalConn.add(journeyLocationId, BAPR.JOURNEY_LOCATION_ID,
+                                valueFactory.createIRI(appNamespace, locationId));
+                        finalConn.add(journeyLocationId,
+                                BAPR.JOURNEY_STATUS, valueFactory.createLiteral("not visited"));
+
+                        finalConn.add(journeyId,
+                                BAPR.JOURNEY_PROPERTY_HAS_LOCATION, journeyLocationId);
+
+                    });
 
 
             IRI ownerIRI = valueFactory.createIRI(appNamespace, userId);
@@ -99,7 +115,6 @@ public class UserRepositoryImpl extends AbstractRepository implements UserReposi
             }
         }
     }
-
 
     @Override
     public UserLocation updateUserLocation(UserLocation userLocation, String userId) {
@@ -119,5 +134,29 @@ public class UserRepositoryImpl extends AbstractRepository implements UserReposi
         conn.commit();
 
         return userLocation;
+    }
+
+    @Override
+    public JourneyUpdate updateUserJourney(JourneyUpdate journeyUpdate, String userId) {
+
+        Repository repo = this.getRepository();
+        RepositoryConnection conn = repo.getConnection();
+        SimpleValueFactory factory = SimpleValueFactory.getInstance();
+
+        String journeyId = factory.createIRI(appNamespace, String.valueOf(journeyUpdate.getJourneyId())).toString();
+        String entityId = factory.createIRI(appNamespace, String.valueOf(journeyUpdate.getEntityId())).toString();
+        String status = factory.createLiteral(String.valueOf(journeyUpdate.getStatus()), XMLSchema.STRING).toString();
+        userId = factory.createIRI(appNamespace, userId).toString();
+
+        updateJourneyLocation = updateJourneyLocation
+                .replaceAll(":id:", userId)
+                .replaceAll(":journeyId:", journeyId)
+                .replaceAll(":entityId:", entityId)
+                .replaceAll(":status:", status);
+
+        conn.prepareUpdate(QueryLanguage.SPARQL, updateJourneyLocation).execute();
+        conn.commit();
+
+        return journeyUpdate;
     }
 }

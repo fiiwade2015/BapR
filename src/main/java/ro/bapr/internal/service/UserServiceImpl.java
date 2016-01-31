@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import ro.bapr.internal.model.request.Journey;
+import ro.bapr.internal.model.request.JourneyUpdate;
 import ro.bapr.internal.model.request.UserLocation;
 import ro.bapr.internal.model.response.journey.JourneyResult;
 import ro.bapr.internal.model.KeyValue;
@@ -89,6 +90,22 @@ public class UserServiceImpl extends AbstractService implements UserService {
         if(location != null) {
             serviceResponse.setStatus(ServiceResponse.Status.SUCCESS);
             serviceResponse.setResult(location);
+        } else {
+            serviceResponse.setStatus(ServiceResponse.Status.FAIL);
+            serviceResponse.setMessage(ServiceResponse.Messages.COULD_NOT_UPDATE_USER_LOCATION);
+        }
+
+        return serviceResponse;
+    }
+
+    @Override
+    public ServiceResponse<JourneyUpdate> updateUserJourney(String userId, JourneyUpdate journeyUpdate) {
+        journeyUpdate = userRepo.updateUserJourney(journeyUpdate, userId);
+
+        ServiceResponse<JourneyUpdate> serviceResponse = new ServiceResponse<>();
+        if(journeyUpdate != null) {
+            serviceResponse.setStatus(ServiceResponse.Status.SUCCESS);
+            serviceResponse.setResult(journeyUpdate);
         } else {
             serviceResponse.setStatus(ServiceResponse.Status.FAIL);
             serviceResponse.setMessage(ServiceResponse.Messages.COULD_NOT_UPDATE_USER_LOCATION);

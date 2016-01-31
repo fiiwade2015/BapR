@@ -1,6 +1,7 @@
 package ro.bapr.internal.service.api;
 
 import ro.bapr.internal.model.request.Journey;
+import ro.bapr.internal.model.request.JourneyUpdate;
 import ro.bapr.internal.model.request.RegisterModel;
 import ro.bapr.internal.model.request.UserLocation;
 import ro.bapr.internal.model.response.journey.JourneyResult;
@@ -16,4 +17,6 @@ public interface UserService {
     ServiceResponse<JourneyResult> getJourneys(String userId);
 
     ServiceResponse<UserLocation> updateUserLocation(String userId, UserLocation location);
+
+    ServiceResponse<JourneyUpdate> updateUserJourney(String userId, JourneyUpdate journeyUpdate);
 }

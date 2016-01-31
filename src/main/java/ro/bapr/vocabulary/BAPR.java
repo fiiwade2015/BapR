@@ -23,6 +23,8 @@ public abstract class BAPR {
     public static final IRI JOURNEY_PROPERTY_HAS_LOCATION;
     public static final IRI HAS_JOURNEY;
     public static final IRI HAS_OWNER;
+    public static final IRI JOURNEY_LOCATION;
+    public static final IRI JOURNEY_LOCATION_ID; //face legatura cu un actual location/entity
 
     static {
         SimpleValueFactory factory = SimpleValueFactory.getInstance();
@@ -31,6 +33,8 @@ public abstract class BAPR {
         JOURNEY_NAME = factory.createIRI(JOURNEY_NAMESPACE, "/name");
         JOURNEY_CREATION_DATE = factory.createIRI(JOURNEY_NAMESPACE, "/creationDate");
         JOURNEY_STATUS = factory.createIRI(JOURNEY_NAMESPACE, "/status");
+        JOURNEY_LOCATION = factory.createIRI(JOURNEY_NAMESPACE, "/location");
+        JOURNEY_LOCATION_ID = factory.createIRI(JOURNEY_NAMESPACE, "/locationId");
 
         JOURNEY_PROPERTY_HAS_LOCATION = factory.createIRI(PROPERTY_NAMESPACE, "/hasLocation");
         HAS_OWNER = factory.createIRI(PROPERTY_NAMESPACE, "/hasOwner");
