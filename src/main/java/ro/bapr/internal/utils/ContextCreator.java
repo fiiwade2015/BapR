@@ -63,10 +63,13 @@ public class ContextCreator {
                 .stream()
                 .forEach(pattern -> {
                     if (tupleExpr.getBindingNames().contains(pattern.getObjectVar().getName())) {
-                        Map<String, Object> items = buildContextItemMap(pattern.getPredicateVar().getValue().stringValue(),
-                                variableTypes.get(pattern.getObjectVar().getName()).stringValue());
 
-                        contextItems.put(pattern.getObjectVar().getName(), items);
+                        if(variableTypes.containsKey(pattern.getObjectVar().getName())) {
+                            Map<String, Object> items = buildContextItemMap(pattern.getPredicateVar().getValue().stringValue(),
+                                    variableTypes.get(pattern.getObjectVar().getName()).stringValue());
+
+                            contextItems.put(pattern.getObjectVar().getName(), items);
+                        }
                     } else if("id".equalsIgnoreCase(pattern.getSubjectVar().getName())){
                         additionalProperties.put((IRI)(pattern.getPredicateVar().getValue()), pattern.getObjectVar().getValue());
                     }
