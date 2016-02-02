@@ -78,11 +78,13 @@ public class GenericRepositoryImpl extends AbstractRepository implements Generic
                               ValueFactory valueFactory, Map<String, Map<String, Object>> ctxItems,
                               RepositoryConnection finalConn) {
 
-        String type =  ctxItems.get(predicate).get("@type").toString();
-        IRI typeIRI;
-        if(type == null || type.trim().isEmpty()) {
-            typeIRI = XMLSchema.STRING;
-        } else {
+        String type = null;
+        if(ctxItems.get(predicate) != null) {
+            type = ctxItems.get(predicate).get("@type").toString();
+        }
+
+        IRI typeIRI = XMLSchema.STRING;
+        if(type != null && !type.trim().isEmpty()) {
             typeIRI = valueFactory.createIRI(type);
         }
 
@@ -95,13 +97,15 @@ public class GenericRepositoryImpl extends AbstractRepository implements Generic
 
 
     private IRI buildPredicate(String predicate, ValueFactory valueFactory, Result result) {
-        IRI predicateIRI;
+        IRI predicateIRI = XMLSchema.STRING;
         //this "if" statement may be useless due to later changes. Please verify
         if ("seeAlso".equalsIgnoreCase(predicate)) {
             predicateIRI = RDFS.SEEALSO;
         } else {
             Map<String, Object> itemIdType = result.getContext().getItems().get(predicate);
-            predicateIRI = valueFactory.createIRI(itemIdType.get("@id").toString());
+            if (itemIdType != null) {
+                predicateIRI = valueFactory.createIRI(itemIdType.get("@id").toString());
+            }
         }
         return predicateIRI;
     }

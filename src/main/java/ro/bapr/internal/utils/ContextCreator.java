@@ -70,7 +70,8 @@ public class ContextCreator {
 
                             contextItems.put(pattern.getObjectVar().getName(), items);
                         }
-                    } else if("id".equalsIgnoreCase(pattern.getSubjectVar().getName())){
+                    } else if("id".equalsIgnoreCase(pattern.getSubjectVar().getName())
+                            && pattern.getObjectVar().getValue() != null){
                         additionalProperties.put((IRI)(pattern.getPredicateVar().getValue()), pattern.getObjectVar().getValue());
                     }
                 });
