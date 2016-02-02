@@ -7,10 +7,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import ro.bapr.internal.model.request.EntityReview;
 import ro.bapr.internal.model.response.Result;
 import ro.bapr.internal.service.api.EntityService;
 
@@ -56,4 +59,22 @@ public class EntityController {
     			
     	return new ResponseEntity<>(result, HttpStatus.OK);
     }
+
+    /**
+     * Method for getting details (such as: thumbnail, externalLinks, abstract and name) associated with a resourceId
+     * @param resourceId - The id of the resource
+     * @return
+     */
+    @RequestMapping(value = Endpoint.ENTITY_DETAILS, method = RequestMethod.PUT)
+    public ResponseEntity<EntityReview> addEntityReview(@PathVariable("id") String resourceId,
+                                                        @RequestHeader("X-User") String userId,
+                                                        @RequestBody EntityReview review){
+
+        //update entity details with what comes from request
+        EntityReview result = service.addReview(resourceId, userId, review);
+
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
+
 }

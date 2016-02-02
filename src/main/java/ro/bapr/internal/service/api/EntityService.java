@@ -2,6 +2,7 @@ package ro.bapr.internal.service.api;
 
 import java.util.Optional;
 
+import ro.bapr.internal.model.request.EntityReview;
 import ro.bapr.internal.model.response.Result;
 
 /**
@@ -14,4 +15,6 @@ public interface EntityService {
     Result getWifi(double lat, double lng, Optional<Double> optionalRadius);
     
     Result getEntityDetails(String resourceId);
+
+    EntityReview addReview(String resourceId, String userId, EntityReview review);
 }

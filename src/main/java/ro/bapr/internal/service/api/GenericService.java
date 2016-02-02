@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.openrdf.query.BindingSet;
 
+import ro.bapr.internal.model.request.EntityReview;
 import ro.bapr.internal.model.response.Result;
 
 /**

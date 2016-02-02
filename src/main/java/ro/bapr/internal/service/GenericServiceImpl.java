@@ -2,10 +2,11 @@ package ro.bapr.internal.service;
 
 import java.util.List;
 
-import org.openrdf.query.BindingSet;
-import org.openrdf.query.resultio.TupleQueryResultFormat;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import org.openrdf.query.BindingSet;
+import org.openrdf.query.resultio.TupleQueryResultFormat;
 
 import ro.bapr.internal.model.response.Result;
 import ro.bapr.internal.repository.api.GenericRepository;

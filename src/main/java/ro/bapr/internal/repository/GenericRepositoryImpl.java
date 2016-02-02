@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 
 import org.openrdf.model.IRI;
 import org.openrdf.model.ValueFactory;
+import org.openrdf.model.impl.SimpleValueFactory;
 import org.openrdf.model.vocabulary.RDF;
 import org.openrdf.model.vocabulary.RDFS;
 import org.openrdf.model.vocabulary.XMLSchema;
@@ -147,4 +148,11 @@ public class GenericRepositoryImpl extends AbstractRepository implements Generic
     }
 
 
+    public void update(String query) {
+        Repository repo = this.getRepository();
+        RepositoryConnection conn = repo.getConnection();
+
+        conn.prepareUpdate(QueryLanguage.SPARQL, query).execute();
+        conn.commit();
+    }
 }

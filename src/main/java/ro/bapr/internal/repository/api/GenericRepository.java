@@ -16,4 +16,6 @@ public interface GenericRepository {
     List<BindingSet> query(String query);
 
     String query(String queryString, TupleQueryResultFormat format);
+
+    void update(String query);
 }
