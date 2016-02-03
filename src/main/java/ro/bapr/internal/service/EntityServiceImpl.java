@@ -91,8 +91,9 @@ public class EntityServiceImpl extends  AbstractService implements EntityService
     public Result getEntityDetails(String resourceId) {
         String transformedId = transformDbId(resourceId, appNamespace);
         String queryString = GET_ENTITY_DETAILS.replaceAll(":id:", transformedId);
+        String queryStringDbpedia = GET_ENTITY_DETAILS.replaceAll(":id:", transformDbId(resourceId, DBPEDIA_RESOURCE_BASE_URL));
 
-        return query(queryString, () -> dbPediaRepository.query(queryString));
+        return query(queryString, () -> dbPediaRepository.query(queryStringDbpedia));
     }
 
     @Override
